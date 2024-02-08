@@ -18,6 +18,12 @@ public class UserRepository {
         return em.find(User.class, userId);
     }
 
+    public User findByEmail(String email) {
+        return em.createQuery("select u from User u where u.email=:email", User.class)
+                .setParameter("email", email)
+                .getSingleResult();
+    }
+
     public List<User> findAll() {
         return em.createQuery("select u from User u", User.class)
                 .getResultList();
@@ -27,5 +33,6 @@ public class UserRepository {
         em.persist(user);
         return user.getId();
     }
+
 
 }
