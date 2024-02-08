@@ -1,6 +1,7 @@
 package WooJJam.mintspot.repository;
 
 import WooJJam.mintspot.domain.User;
+import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

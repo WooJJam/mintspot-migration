@@ -1,6 +1,7 @@
 package WooJJam.mintspot.service;
 
 import WooJJam.mintspot.domain.User;
+import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
 import WooJJam.mintspot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long register(User reqUesr) {
+    public Long register(UserRegisterRequestBodyDto userRegisterRequestBodyDto) {
         User user = new User();
-        user.createUser(reqUesr.getEmail(), reqUesr.getPassword(), reqUesr.getGender(), reqUesr.getSexual());
+        user.createUser(
+                userRegisterRequestBodyDto.getEmail(),
+                userRegisterRequestBodyDto.getPassword(),
+                userRegisterRequestBodyDto.getGender(),
+                userRegisterRequestBodyDto.getSexual()
+        );
         return userRepository.register(user);
     }
 }
