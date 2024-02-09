@@ -1,6 +1,7 @@
 package WooJJam.mintspot.domain.user;
 
 import WooJJam.mintspot.domain.Chat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -25,12 +26,13 @@ public class User {
     private Sexual sexual;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Chat> chat = new ArrayList<>();
+    private List<Chat> chats = new ArrayList<>();
 
     public void createUser(String email, String password, Gender gender, Sexual sexual) {
         this.email = email;
         this.password = password;
         this.gender = gender;
-        this.sexual =sexual;
+        this.sexual = sexual;
     }
+
 }

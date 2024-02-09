@@ -18,13 +18,10 @@ public class Chat {
     private String title;
     private String category;
 
-    public void setUser(User user) {
-        this.user = user;
-    }
     public void createChatRoom(String title, String category, User user) {
         this.title = title;
         this.category = category;
         this.user = user;
-        user.getChat().add(this);
+        this.user.getChats().add(this);
     }
 }
