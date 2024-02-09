@@ -1,4 +1,4 @@
-package WooJJam.mintspot.domain;
+package WooJJam.mintspot.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

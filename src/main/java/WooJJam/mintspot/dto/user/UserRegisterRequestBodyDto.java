@@ -1,7 +1,7 @@
 package WooJJam.mintspot.dto.user;
 
-import WooJJam.mintspot.domain.Gender;
-import WooJJam.mintspot.domain.Sexual;
+import WooJJam.mintspot.domain.user.Gender;
+import WooJJam.mintspot.domain.user.Sexual;
 import lombok.*;
 
 @Getter @Setter

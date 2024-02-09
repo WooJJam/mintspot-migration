@@ -1,7 +1,11 @@
-package WooJJam.mintspot.domain;
+package WooJJam.mintspot.domain.user;
 
+import WooJJam.mintspot.domain.Chat;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +23,9 @@ public class User {
 
     @Enumerated(value = EnumType.STRING)
     private Sexual sexual;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Chat> chat = new ArrayList<>();
 
     public void createUser(String email, String password, Gender gender, Sexual sexual) {
         this.email = email;

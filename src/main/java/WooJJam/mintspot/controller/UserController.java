@@ -1,12 +1,10 @@
 package WooJJam.mintspot.controller;
 
-import WooJJam.mintspot.domain.User;
 import WooJJam.mintspot.dto.user.UserLoginRequestBodyDto;
 import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
 import WooJJam.mintspot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
