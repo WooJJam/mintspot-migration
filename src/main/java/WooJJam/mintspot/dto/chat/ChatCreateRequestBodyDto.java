@@ -1,5 +1,6 @@
 package WooJJam.mintspot.dto.chat;
 
+import WooJJam.mintspot.domain.chat.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,5 +8,5 @@ import lombok.Setter;
 public class ChatCreateRequestBodyDto {
     private String email;
     private String title;
-    private String category;
+    private Category category;
 }

@@ -1,7 +1,6 @@
 package WooJJam.mintspot.domain.user;
 
-import WooJJam.mintspot.domain.Chat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import WooJJam.mintspot.domain.chat.Chat;
 import jakarta.persistence.*;
 import lombok.Getter;
 

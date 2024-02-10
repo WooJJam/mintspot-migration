@@ -1,4 +1,4 @@
-package WooJJam.mintspot.domain;
+package WooJJam.mintspot.domain.chat;
 
 import WooJJam.mintspot.domain.user.User;
 import jakarta.persistence.*;
@@ -16,9 +16,11 @@ public class Chat {
     private User user;
 
     private String title;
-    private String category;
 
-    public void createChatRoom(String title, String category, User user) {
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    public void createChatRoom(String title, Category category, User user) {
         this.title = title;
         this.category = category;
         this.user = user;

@@ -1,6 +1,6 @@
 package WooJJam.mintspot.repository;
 
-import WooJJam.mintspot.domain.Chat;
+import WooJJam.mintspot.domain.chat.Chat;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
