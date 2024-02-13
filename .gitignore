@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Property ###
+src/main/resources/application-DB.properties
+src/main/resources/application-API.properties
