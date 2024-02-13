@@ -1,5 +1,6 @@
 package WooJJam.mintspot.service;
 
+import WooJJam.mintspot.config.RestTemplateConfig;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,16 +16,19 @@ public class ChatGptService {
     private String GPT_API_KEY;
     @Value("${GPT_MESSAGE_URL}")
     private String GPT_MESSAGE_URL;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplateConfig restTemplateConfig;
+
 
     public ResponseEntity<String> sendMessage(ChatCompletionDto chatCompletionDto) {
         HttpHeaders headers = buildMessageHeaderRequest();
         HttpEntity<ChatCompletionDto> messageRequestEntity = new HttpEntity<>(chatCompletionDto, headers);
-        return restTemplate.exchange(
-                GPT_MESSAGE_URL,
-                HttpMethod.POST,
-                messageRequestEntity,
-                String.class
+        return restTemplateConfig
+                .restTemplate()
+                .exchange(
+                        GPT_MESSAGE_URL,
+                        HttpMethod.POST,
+                        messageRequestEntity,
+                        String.class
         );
     }
 
