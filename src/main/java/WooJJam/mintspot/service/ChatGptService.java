@@ -1,5 +1,6 @@
 package WooJJam.mintspot.service;
 
+import WooJJam.mintspot.config.ChatGptConfig;
 import WooJJam.mintspot.config.RestTemplateConfig;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
 import lombok.RequiredArgsConstructor;
@@ -12,30 +13,20 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class ChatGptService {
 
-    @Value("${GPT_API_KEY}")
-    private String GPT_API_KEY;
-    @Value("${GPT_MESSAGE_URL}")
-    private String GPT_MESSAGE_URL;
     private final RestTemplateConfig restTemplateConfig;
-
+    private final ChatGptConfig chatGptConfig;
 
     public ResponseEntity<String> sendMessage(ChatCompletionDto chatCompletionDto) {
-        HttpHeaders headers = buildMessageHeaderRequest();
-        HttpEntity<ChatCompletionDto> messageRequestEntity = new HttpEntity<>(chatCompletionDto, headers);
+        HttpHeaders headers = chatGptConfig.buildMessageHeader();
+        HttpEntity<ChatCompletionDto> messageRequestEntity = chatGptConfig.buildMessageBody(chatCompletionDto, headers);
         return restTemplateConfig
                 .restTemplate()
                 .exchange(
-                        GPT_MESSAGE_URL,
+                        chatGptConfig.GPT_MESSAGE_URL,
                         HttpMethod.POST,
                         messageRequestEntity,
                         String.class
         );
     }
 
-    private HttpHeaders buildMessageHeaderRequest() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(GPT_API_KEY);
-        return headers;
-    }
 }
