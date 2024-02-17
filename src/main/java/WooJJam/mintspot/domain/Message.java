@@ -14,4 +14,9 @@ public class Message {
     @JoinColumn(name = "chat_id")
     private Chat chat;
     private String content;
+
+    public void createMessage(Chat chat, String content) {
+        this.chat = chat;
+        this.content = content;
+    }
 }

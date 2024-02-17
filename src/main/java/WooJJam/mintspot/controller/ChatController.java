@@ -40,10 +40,13 @@ public class ChatController {
      * ]
      * }
      **/
-    @GetMapping("/send-message")
-    public Object sendMessage(@RequestBody ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
+    @GetMapping("/{id}/send-message")
+    public Object sendMessage(
+            @PathVariable("id") Long chatId,
+            @RequestBody ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         System.out.println("chatMessageRequestDto = " + chatMessageRequestDto);
-        return this.chatgptService.sendMessage(chatMessageRequestDto);
+        System.out.println("chatId = " + chatId);
+        return this.chatgptService.sendMessage(chatId, chatMessageRequestDto);
     }
 
 }

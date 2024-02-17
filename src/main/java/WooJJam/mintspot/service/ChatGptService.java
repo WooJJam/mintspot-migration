@@ -2,10 +2,12 @@ package WooJJam.mintspot.service;
 
 import WooJJam.mintspot.config.ChatGptConfig;
 import WooJJam.mintspot.config.RestTemplateConfig;
+import WooJJam.mintspot.domain.chat.Chat;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
 import WooJJam.mintspot.dto.gpt.ChatRequestMsgDto;
-import WooJJam.mintspot.dto.gpt.ChatResponseMsgDto;
+import WooJJam.mintspot.repository.ChatRepository;
+import WooJJam.mintspot.repository.MessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
@@ -25,8 +27,10 @@ public class ChatGptService {
 
     private final RestTemplateConfig restTemplateConfig;
     private final ChatGptConfig chatGptConfig;
+    private final ChatRepository chatRepository;
+    private final MessageRepository messageRepository;
 
-    public Object sendMessage(ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
+    public Object sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         HttpHeaders headers = chatGptConfig.buildMessageHeader();
         String systemMessage = chatGptConfig.getSystemMessage(chatMessageRequestDto.getGender(), chatMessageRequestDto.getCategory());
         ChatCompletionDto chatCompletionDto = createRequestMessages(chatMessageRequestDto.getUserContent(), systemMessage);
@@ -39,8 +43,9 @@ public class ChatGptService {
                         messageRequestEntity,
                         String.class
                 );
-
         String message = jsonParseResponseMessage(chatMessageResponse);
+        Chat findChat = chatRepository.findById(chatId);
+        messageRepository.saveMessage(findChat, message);
         return message;
     }
 
