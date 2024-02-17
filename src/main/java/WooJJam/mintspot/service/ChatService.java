@@ -23,7 +23,6 @@ public class ChatService {
         String title = chatCreateRequestBodyDto.getTitle();
         Category category = chatCreateRequestBodyDto.getCategory();
         User findUser = userRepository.findByEmail(email);
-        System.out.println("findUser = " + findUser);
 
         Chat chat = new Chat();
         chat.createChatRoom(title, category, findUser);

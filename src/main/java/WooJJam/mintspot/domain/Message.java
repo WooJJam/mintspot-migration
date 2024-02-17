@@ -13,6 +13,8 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")
     private Chat chat;
+
+    @Column(length = 1500)
     private String content;
 
     public void createMessage(Chat chat, String content) {

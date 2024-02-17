@@ -40,7 +40,10 @@ public class ChatController {
      * ]
      * }
      **/
-    @GetMapping("/{id}/send-message")
+
+//    @GetMapping("/{id}")
+
+    @PostMapping("/{id}/send-message")
     public Object sendMessage(
             @PathVariable("id") Long chatId,
             @RequestBody ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {

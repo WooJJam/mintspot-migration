@@ -16,11 +16,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ChatGptService {
 
     private final RestTemplateConfig restTemplateConfig;
@@ -28,6 +30,7 @@ public class ChatGptService {
     private final ChatRepository chatRepository;
     private final MessageRepository messageRepository;
 
+    @Transactional
     public Object sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         HttpHeaders headers = chatGptConfig.buildMessageHeader();
         String systemMessage = chatGptConfig.getSystemMessage(chatMessageRequestDto.getGender(), chatMessageRequestDto.getCategory());
