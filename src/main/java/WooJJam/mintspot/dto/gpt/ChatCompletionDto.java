@@ -13,4 +13,5 @@ public class ChatCompletionDto {
         this.model = model;
         this.messages = messages;
     }
+
 }

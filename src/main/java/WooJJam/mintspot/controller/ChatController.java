@@ -1,9 +1,13 @@
 package WooJJam.mintspot.controller;
 
+import WooJJam.mintspot.domain.chat.Category;
+import WooJJam.mintspot.domain.user.Gender;
 import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
+import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
 import WooJJam.mintspot.service.ChatGptService;
 import WooJJam.mintspot.service.ChatService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +40,10 @@ public class ChatController {
      *         }
      *     ]
      * }
-     */
+     **/
     @GetMapping("/send-message")
-    public ResponseEntity<String> sendMessage(@RequestBody ChatCompletionDto chatCompletionDto) {
-        return this.chatgptService.sendMessage(chatCompletionDto);
+    public ResponseEntity<String> sendMessage(@RequestBody ChatMessageRequestDto chatMessageRequestDto) {
+        return this.chatgptService.sendMessage(chatMessageRequestDto);
     }
 
 }

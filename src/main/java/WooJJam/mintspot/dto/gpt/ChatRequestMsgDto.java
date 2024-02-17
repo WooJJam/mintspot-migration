@@ -11,4 +11,8 @@ public class ChatRequestMsgDto {
         this.role = role;
         this.content = content;
     }
+
+    public static ChatRequestMsgDto createSystemMessage(String content) {
+        return new ChatRequestMsgDto("system", content);
+    }
 }
