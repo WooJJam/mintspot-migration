@@ -18,8 +18,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +41,7 @@ public class ChatGptService {
                         messageRequestEntity,
                         String.class
                 );
+
         String message = jsonParseResponseMessage(chatMessageResponse);
         Chat findChat = chatRepository.findById(chatId);
         messageRepository.saveMessage(findChat, message);

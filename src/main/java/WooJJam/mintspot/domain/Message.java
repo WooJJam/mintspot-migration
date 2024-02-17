@@ -18,5 +18,6 @@ public class Message {
     public void createMessage(Chat chat, String content) {
         this.chat = chat;
         this.content = content;
+        this.chat.getMessages().add(this);
     }
 }
