@@ -21,7 +21,7 @@ public class ChatGptService {
     public ResponseEntity<String> sendMessage(ChatMessageRequestDto chatMessageRequestDto) {
         HttpHeaders headers = chatGptConfig.buildMessageHeader();
         String systemMessage = chatGptConfig.getSystemMessage(chatMessageRequestDto.getGender(), chatMessageRequestDto.getCategory());
-        ChatCompletionDto chatCompletionDto = createRequestMessages(chatMessageRequestDto.getUserMessage(), systemMessage);
+        ChatCompletionDto chatCompletionDto = createRequestMessages(chatMessageRequestDto.getUserContent(), systemMessage);
         HttpEntity<ChatCompletionDto> messageRequestEntity = chatGptConfig.buildMessageBody(chatCompletionDto, headers);
         return restTemplateConfig
                 .restTemplate()

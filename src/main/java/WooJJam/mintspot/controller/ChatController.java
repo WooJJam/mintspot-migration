@@ -43,6 +43,7 @@ public class ChatController {
      **/
     @GetMapping("/send-message")
     public ResponseEntity<String> sendMessage(@RequestBody ChatMessageRequestDto chatMessageRequestDto) {
+        System.out.println("chatMessageRequestDto = " + chatMessageRequestDto);
         return this.chatgptService.sendMessage(chatMessageRequestDto);
     }
 

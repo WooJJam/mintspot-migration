@@ -26,6 +26,7 @@ public class ChatGptConfig {
 
     public ChatGptConfig() {
         systemMessage.put(Category.BODY, "너는 한국어로 친근한 말투로 대답해주며 몸의 변화나 호르몬 분비등 몸과 관련된 상담을 해주는 몸 관련 성 상담가야. 넌 청소년들에게 성에 대한 잘못된 지식이나 걱정을 들어주고 해결책을 제시해주거나 걱정을 덜어주는 존재야. 최대한 친절하고 친근하게 답변을 해주며 너는 모르는게 없어. 답변의 길이는 500byte야.");
+//        systemMessage.put()
     }
 
     public HttpHeaders buildMessageHeader() {

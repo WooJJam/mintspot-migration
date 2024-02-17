@@ -8,5 +8,5 @@ import lombok.Data;
 public class ChatMessageRequestDto {
     private Gender gender;
     private Category category;
-    private String userMessage;
+    private String userContent;
 }

@@ -12,7 +12,4 @@ public class ChatRequestMsgDto {
         this.content = content;
     }
 
-    public static ChatRequestMsgDto createSystemMessage(String content) {
-        return new ChatRequestMsgDto("system", content);
-    }
 }
