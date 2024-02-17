@@ -1,8 +1,12 @@
 package WooJJam.mintspot.domain.chat;
 
+import WooJJam.mintspot.domain.Message;
 import WooJJam.mintspot.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +23,9 @@ public class Chat {
 
     @Enumerated(EnumType.STRING)
     private Category category;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chat")
+    private List<Message> messages = new ArrayList<>();
 
     public void createChatRoom(String title, Category category, User user) {
         this.title = title;
