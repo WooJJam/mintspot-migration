@@ -1,16 +1,16 @@
 package WooJJam.mintspot.controller;
 
-import WooJJam.mintspot.domain.chat.Category;
-import WooJJam.mintspot.domain.user.Gender;
 import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
-import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
+import WooJJam.mintspot.dto.gpt.ChatResponseMsgDto;
 import WooJJam.mintspot.service.ChatGptService;
 import WooJJam.mintspot.service.ChatService;
-import lombok.Data;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
@@ -26,23 +26,22 @@ public class ChatController {
     }
 
     /**
-     * @INPUT
+     * @INPUT {
+     * "model": "gpt-3.5-turbo",
+     * "messages": [
      * {
-     *     "model": "gpt-3.5-turbo",
-     *     "messages": [
-     *         {
-     *             "role": "system",
-     *             "content": "넌 한국어로만 대답하는 프로그래밍 봇이야."
-     *         },
-     *         {
-     *             "role":"user",
-     *             "content":"자바가 뭐야?"
-     *         }
-     *     ]
+     * "role": "system",
+     * "content": "넌 한국어로만 대답하는 프로그래밍 봇이야."
+     * },
+     * {
+     * "role":"user",
+     * "content":"자바가 뭐야?"
+     * }
+     * ]
      * }
      **/
     @GetMapping("/send-message")
-    public ResponseEntity<String> sendMessage(@RequestBody ChatMessageRequestDto chatMessageRequestDto) {
+    public Object sendMessage(@RequestBody ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         System.out.println("chatMessageRequestDto = " + chatMessageRequestDto);
         return this.chatgptService.sendMessage(chatMessageRequestDto);
     }
