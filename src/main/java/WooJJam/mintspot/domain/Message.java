@@ -2,8 +2,10 @@ package WooJJam.mintspot.domain;
 
 import WooJJam.mintspot.domain.chat.Chat;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Message {
 
     @Id @GeneratedValue

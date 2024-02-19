@@ -3,6 +3,8 @@ package WooJJam.mintspot.service;
 import WooJJam.mintspot.config.ChatGptConfig;
 import WooJJam.mintspot.config.RestTemplateConfig;
 import WooJJam.mintspot.domain.chat.Chat;
+import WooJJam.mintspot.dto.ChatMessageDto;
+import WooJJam.mintspot.dto.chat.ChatDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
 import WooJJam.mintspot.dto.gpt.ChatRequestMsgDto;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class ChatGptService {
     private final MessageRepository messageRepository;
 
     @Transactional
-    public Object sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
+    public String sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         HttpHeaders headers = chatGptConfig.buildMessageHeader();
         String systemMessage = chatGptConfig.getSystemMessage(chatMessageRequestDto.getGender(), chatMessageRequestDto.getCategory());
         ChatCompletionDto chatCompletionDto = createRequestMessages(chatMessageRequestDto.getUserContent(), systemMessage);
@@ -65,6 +68,16 @@ public class ChatGptService {
         ChatRequestMsgDto userRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.userRole, userMessage);
         List<ChatRequestMsgDto> messages = List.of(systemRequestMsgDto, userRequestMsgDto);
         return new ChatCompletionDto(chatGptConfig.model, messages);
+    }
+
+    public List<ChatMessageDto> listMessage(Long chatId) {
+        List<Chat> messages = messageRepository.listMessage(chatId);
+        List<ChatMessageDto> messageList = messages.stream()
+                .map(ChatMessageDto::new)
+                .collect(Collectors.toList());
+
+
+        return messageList;
     }
 
 }
