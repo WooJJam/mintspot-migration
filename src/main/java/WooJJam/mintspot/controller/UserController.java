@@ -6,6 +6,7 @@ import WooJJam.mintspot.dto.user.UserLoginRequestBodyDto;
 import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
 import WooJJam.mintspot.repository.UserRepository;
 import WooJJam.mintspot.service.UserService;
+import WooJJam.mintspot.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,11 @@ public class UserController {
         return users.stream()
                 .map(u -> new UserDto(u))
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/jwt")
+    public void createJwt() {
+        JwtUtils jwtUtils = new JwtUtils();
+        jwtUtils.buildJwt();
     }
 }
