@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: API, DB
+    include: API, DB, JWT
 
   jpa:
     hibernate:

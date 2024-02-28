@@ -39,3 +39,4 @@ out/
 ### Property ###
 src/main/resources/application-DB.properties
 src/main/resources/application-API.properties
+src/main/resources/application-JWT.properties

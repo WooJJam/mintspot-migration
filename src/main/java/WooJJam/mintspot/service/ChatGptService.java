@@ -4,7 +4,6 @@ import WooJJam.mintspot.config.ChatGptConfig;
 import WooJJam.mintspot.config.RestTemplateConfig;
 import WooJJam.mintspot.domain.chat.Chat;
 import WooJJam.mintspot.dto.ChatMessageDto;
-import WooJJam.mintspot.dto.chat.ChatDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
 import WooJJam.mintspot.dto.gpt.ChatRequestMsgDto;

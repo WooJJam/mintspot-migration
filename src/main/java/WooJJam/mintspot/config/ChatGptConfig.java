@@ -20,6 +20,7 @@ public class ChatGptConfig {
     private String GPT_API_KEY;
     @Value("${GPT_MESSAGE_URL}")
     public String GPT_MESSAGE_URL;
+
     public final String model = "gpt-3.5-turbo";
     public final String systemRole = "system";
     public final String userRole = "user";
