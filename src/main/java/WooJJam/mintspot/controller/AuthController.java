@@ -2,11 +2,11 @@ package WooJJam.mintspot.controller;
 
 import WooJJam.mintspot.dto.TokenDto;
 import WooJJam.mintspot.service.AuthService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.naming.AuthenticationException;
 
 @RestController
 @RequestMapping("/auth")
@@ -18,6 +18,11 @@ public class AuthController {
     @GetMapping("/token")
     public TokenDto createAccessToken() {
         return authService.createToken();
+    }
+
+    @GetMapping("/verify")
+    public String validAccessToken(@RequestHeader("Authorization") String authorization) {
+        return authService.verify(authorization);
     }
 
 }

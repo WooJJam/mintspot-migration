@@ -4,7 +4,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import javax.crypto.SecretKey;
+import javax.naming.AuthenticationException;
 import java.security.Key;
 import java.util.Date;
 
@@ -12,10 +15,7 @@ import java.util.Date;
 public class JwtProvider {
 
     @Value("${JWT_SECRET_KEY}")
-    private String jwt_secret_key;
-
-    @Value("${GPT_API_KEY}")
-    private String GPT_API_KEY;
+    private String JWT_SECRET_KEY;
     @Value("${JWT_ISSUER}")
     private String JWT_ISSUER;
     private static final String BEARER_TYPE = "Bearer";
@@ -41,7 +41,7 @@ public class JwtProvider {
 
     public String createRefreshToken() {
         long refreshTokenExpireTime = 1000 * 60 * 60 * 24 * 7;
-        Key secretKey = Keys.hmacShaKeyFor(getJwtSecretKeyBytes());
+        SecretKey secretKey = Keys.hmacShaKeyFor(getJwtSecretKeyBytes());
         return Jwts.builder()
                 .header()
                 .type("RefreshToken")
@@ -53,7 +53,20 @@ public class JwtProvider {
                 .compact();
     }
 
+    public String getTokenInfo(String token) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(getJwtSecretKeyBytes());
+        String accessToken = getToken(token);
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(accessToken).getPayload().get("email", String.class);
+    }
+
+    private String getToken(String token) {
+        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+            return token.split(" ")[1];
+        }
+        else return null;
+    }
+
     private byte[] getJwtSecretKeyBytes() {
-        return jwt_secret_key.getBytes();
+        return JWT_SECRET_KEY.getBytes();
     }
 }
