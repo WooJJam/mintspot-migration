@@ -17,6 +17,10 @@ public class UserRepository {
         return em.find(User.class, userId);
     }
 
+    public void login(User user, String refreshToken) {
+        user.updateRefreshToken(refreshToken);
+    }
+
     public User findByEmail(String email) {
         return em.createQuery("select u from User u where u.email=:email", User.class)
                 .setParameter("email", email)

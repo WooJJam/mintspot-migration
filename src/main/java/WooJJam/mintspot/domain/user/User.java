@@ -3,12 +3,13 @@ package WooJJam.mintspot.domain.user;
 import WooJJam.mintspot.domain.chat.Chat;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Getter @Setter
 public class User {
 
     @Id @GeneratedValue
@@ -24,6 +25,8 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private Sexual sexual;
 
+    private String refreshToken;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Chat> chats = new ArrayList<>();
 
@@ -32,6 +35,10 @@ public class User {
         this.password = password;
         this.gender = gender;
         this.sexual = sexual;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
 }

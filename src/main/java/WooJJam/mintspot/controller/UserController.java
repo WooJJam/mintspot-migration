@@ -21,16 +21,6 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @PostMapping("/register")
-    public Long register(@RequestBody UserRegisterRequestBodyDto userRegisterRequestBodyDto) {
-        return userService.register(userRegisterRequestBodyDto);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
-        return userService.login(userLoginRequestBodyDto);
-    }
-
     @GetMapping("/chat/list")
     public List<UserDto> chatList() {
         List<User> users = userRepository.findAll();

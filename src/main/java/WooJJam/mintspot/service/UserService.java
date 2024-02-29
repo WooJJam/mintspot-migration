@@ -17,26 +17,5 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Transactional
-    public Long register(UserRegisterRequestBodyDto userRegisterRequestBodyDto) {
-        User user = new User();
-        user.createUser(
-                userRegisterRequestBodyDto.getEmail(),
-                userRegisterRequestBodyDto.getPassword(),
-                userRegisterRequestBodyDto.getGender(),
-                userRegisterRequestBodyDto.getSexual()
-        );
-        return userRepository.register(user);
-    }
 
-    public ResponseEntity<?> login(UserLoginRequestBodyDto userLoginRequestBodyDto) {
-        String email = userLoginRequestBodyDto.getEmail();
-        String password = userLoginRequestBodyDto.getPassword();
-        User findUser = userRepository.findByEmail(email);
-        if (findUser != null && findUser.getPassword().equals(password)) {
-            return ResponseEntity.ok(findUser);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOT EXIST USER");
-        }
-    }
 }
