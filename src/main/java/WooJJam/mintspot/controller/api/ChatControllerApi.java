@@ -1,11 +1,8 @@
-package WooJJam.mintspot.controller;
+package WooJJam.mintspot.controller.api;
 
-import WooJJam.mintspot.domain.Message;
-import WooJJam.mintspot.domain.chat.Chat;
 import WooJJam.mintspot.dto.ChatMessageDto;
 import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
-import WooJJam.mintspot.dto.gpt.ChatResponseMsgDto;
 import WooJJam.mintspot.service.ChatGptService;
 import WooJJam.mintspot.service.ChatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
-public class ChatController {
+public class ChatControllerApi {
 
     private final ChatService chatService;
     private final ChatGptService chatgptService;

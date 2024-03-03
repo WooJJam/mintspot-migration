@@ -1,4 +1,4 @@
-package WooJJam.mintspot.controller;
+package WooJJam.mintspot.controller.api;
 
 import WooJJam.mintspot.domain.user.User;
 import WooJJam.mintspot.dto.user.UserDto;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserControllerApi {
 
     private final UserService userService;
     private final UserRepository userRepository;
