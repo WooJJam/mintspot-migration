@@ -3,6 +3,7 @@ package WooJJam.mintspot.controller.mvc;
 import WooJJam.mintspot.domain.user.Gender;
 import WooJJam.mintspot.domain.user.Sexual;
 import WooJJam.mintspot.domain.user.User;
+import WooJJam.mintspot.dto.user.UserLoginRequestBodyDto;
 import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
 import WooJJam.mintspot.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,4 +34,16 @@ public class UserControllerMvc {
         userService.register(userRegisterRequestBodyDto);
         return "redirect:/chat";
     }
+
+    @GetMapping("/login")
+    public String loginRenderView() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@ModelAttribute UserLoginRequestBodyDto userLoginRequestBodyDto) {
+        userService.login(userLoginRequestBodyDto);
+        return "redurect:/chat";
+    }
+
 }
