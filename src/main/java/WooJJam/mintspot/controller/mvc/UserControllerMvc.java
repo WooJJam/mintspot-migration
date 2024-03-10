@@ -5,6 +5,8 @@ import WooJJam.mintspot.domain.user.Sexual;
 import WooJJam.mintspot.domain.user.User;
 import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
 import WooJJam.mintspot.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +27,9 @@ public class UserControllerMvc {
     }
     
     @PostMapping("/register")
-    public String register(@ModelAttribute UserRegisterRequestBodyDto userRegisterRequestBodyDto) {
+    public String register(@ModelAttribute UserRegisterRequestBodyDto userRegisterRequestBodyDto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("email", userRegisterRequestBodyDto.getEmail());
         userService.register(userRegisterRequestBodyDto);
         return "redirect:/chat";
     }

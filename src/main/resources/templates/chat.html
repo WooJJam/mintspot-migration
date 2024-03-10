@@ -84,7 +84,12 @@
 
 <div class="nav-bar">
   <div>MintSpot</div>
-  <a href="#">Log in</a>
+  <div th:if="${session.email} == null">
+    <a href="#">Log in</a>
+  </div>
+  <div th:if="${session.email} != null">
+    <span th:text="${session.email}"></span>
+  </div>
 </div>
 
 <div class="container">
