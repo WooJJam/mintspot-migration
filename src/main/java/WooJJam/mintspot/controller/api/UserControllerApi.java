@@ -27,7 +27,7 @@ public class UserControllerApi {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
+    public Long login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
         return userService.login(userLoginRequestBodyDto);
     }
 

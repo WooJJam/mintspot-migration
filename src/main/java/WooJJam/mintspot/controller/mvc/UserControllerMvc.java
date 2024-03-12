@@ -9,6 +9,7 @@ import WooJJam.mintspot.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,8 @@ public class UserControllerMvc {
     public String register(@ModelAttribute UserRegisterRequestBodyDto userRegisterRequestBodyDto, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("email", userRegisterRequestBodyDto.getEmail());
-        userService.register(userRegisterRequestBodyDto);
-        return "redirect:/chat";
+        Long userId = userService.register(userRegisterRequestBodyDto);
+        return "redirect:/chat/"+userId;
     }
 
     @GetMapping("/login")
@@ -42,8 +43,8 @@ public class UserControllerMvc {
 
     @PostMapping("/login")
     public String login(@ModelAttribute UserLoginRequestBodyDto userLoginRequestBodyDto) {
-        userService.login(userLoginRequestBodyDto);
-        return "redurect:/chat";
+        Long userId = userService.login(userLoginRequestBodyDto);
+        return "redirect:/chat/"+userId;
     }
 
 }

@@ -29,14 +29,15 @@ public class UserService {
         return userRepository.register(user);
     }
 
-    public ResponseEntity<?> login(UserLoginRequestBodyDto userLoginRequestBodyDto) {
+    public Long login(UserLoginRequestBodyDto userLoginRequestBodyDto) {
         String email = userLoginRequestBodyDto.getEmail();
         String password = userLoginRequestBodyDto.getPassword();
         User findUser = userRepository.findByEmail(email);
-        if (findUser != null && findUser.getPassword().equals(password)) {
-            return ResponseEntity.ok(findUser);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOT EXIST USER");
-        }
+        return findUser.getId();
+//        if (findUser != null && findUser.getPassword().equals(password)) {
+//            return ResponseEntity.ok(findUser);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOT EXIST USER");
+//        }
     }
 }
