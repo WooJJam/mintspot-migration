@@ -6,6 +6,9 @@
   <title>Mint Spot</title>
   <style>
     body {
+      display: flex;
+      width: 100%;
+      height: 100%;
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,10 +17,10 @@
     }
 
     .container {
-      width: 450px;
+      width: 80%;
       margin: 0 auto;
       text-align: center;
-      background-color: #3E3B47;
+      display: inline-block;
     }
 
     .header {
@@ -42,17 +45,16 @@
     .menu {
       list-style: none;
       padding: 0;
+      display: inline-block;
     }
 
     .menu li {
-      /*background: #4e0eff;*/
       width: 450px;
       margin: 10px 0;
       border-radius: 5px;
       border: solid 1px #5e17eb;
-      /*overflow: hidden;*/
       position: relative;
-      text-align: center;
+      display: block;
     }
 
     .menu li a {
@@ -61,7 +63,6 @@
       color: white;
       text-decoration: none;
       align-items: center;
-      /*transition: background-color 0.3s ease;*/
     }
 
     .menu li a:hover {
@@ -78,27 +79,41 @@
       top: 50%;
       transform: translateY(-50%);
     }
+
+    .right-bar {
+      display: inline-block;
+      width: 20%;
+      border-bottom: solid 1px #5e17eb;
+    }
+
+    .right-bar article {
+      margin: 5px;
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
 
-<div class="nav-bar">
-  <div>MintSpot</div>
-  <a href="#">Log in</a>
-</div>
-
 <div class="container">
+  <div class="nav-bar">
+    <div>MintSpot</div>
+    <a href="#">Log in</a>
+  </div>
   <div class="header">
     <h1>민트스팟 컨텐츠</h1>
     <p>궁금한 컨텐츠를 선택하여 민트스팟에게 물어보세요!</p>
   </div>
-
   <ul class="menu">
     <li><a href="#">몸<i class="right-icon">👉</i></a></li>
     <li><a href="#">성생활<i class="right-icon">👉</i></a></li>
     <li><a href="#">성적자아<i class="right-icon">🔒</i></a></li>
     <li><a href="#">기타<i class="right-icon">🔒</i></a></li>
   </ul>
+</div>
+<div class="right-bar">
+  <article>aa</article>
+  <article>bb</article>
+  <article>cc</article>
 </div>
 
 </body>
