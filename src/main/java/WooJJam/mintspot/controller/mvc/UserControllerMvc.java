@@ -79,8 +79,18 @@ public class UserControllerMvc {
 //    }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute UserLoginRequestBodyDto userLoginRequestBodyDto, HttpServletRequest request) {
+    public String login(
+            @Valid @ModelAttribute("user") UserLoginRequestBodyDto userLoginRequestBodyDto,
+            BindingResult bindingResult,
+            HttpServletRequest request) {
+
+        if (bindingResult.hasErrors()) {
+            log.info("error = {}",bindingResult);
+            return "login";
+        }
+
         Optional<Long> optionalUserId = userService.login(userLoginRequestBodyDto);
+
         if (optionalUserId.isPresent()) {
             HttpSession session = request.getSession();
             session.setAttribute("email", userLoginRequestBodyDto.getEmail());

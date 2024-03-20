@@ -34,15 +34,12 @@
             margin-top: 20px;
         }
 
-        input[type=text],
-        input[type=password] {
+        .input-form {
             padding: 5px;
-            margin: 10px 0;
+            margin: 5px 0;
             border: none;
             border-radius: 5px;
         }
-
-
 
         button {
             background-color: #8265A7;
@@ -52,6 +49,10 @@
             border-radius: 5px;
         }
 
+        .field-error {
+            border-color: red;
+            color: red;
+        }
 
     </style>
 </head>
@@ -63,9 +64,21 @@
         <div class="form-container">
             <form th:action th:object="${user}" method="post">
                 <p><label for="email">이메일</label>
-                    <input type="text" id="email" th:field="*{email}" placeholder="이메일" required></p>
+                    <input type="text" id="email"
+                           th:errorclass="field-error"
+                           th:class="input-form"
+                           th:field="*{email}"></p>
+                <div class="field-error" th:errors="*{email}">
+                    이메일 오류 메시지
+                </div>
                 <p><label for="password">패스워드</label>
-                    <input type="password" id="password" th:field="*{password}" placeholder="패스워드" required></p>
+                    <input type="password" id="password"
+                           th:errorclass="field-error"
+                           th:class="input-form"
+                           th:field="*{password}" placeholder="패스워드"></p>
+                <div class="field-error" th:errors="*{password}">
+                    비밀번호 오류 메시지
+                </div>
                 <button type="submit">로그인</button>
             </form>
         </div>
