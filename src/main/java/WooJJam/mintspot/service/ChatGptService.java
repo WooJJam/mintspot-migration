@@ -70,14 +70,14 @@ public class ChatGptService {
         return new ChatCompletionDto(chatGptConfig.model, messages);
     }
 
-    public List<ChatMessageDto> listMessage(Long chatId) {
-        List<Chat> messages = messageRepository.listMessage(chatId);
-        List<ChatMessageDto> messageList = messages.stream()
-                .map(ChatMessageDto::new)
-                .collect(Collectors.toList());
-
-
-        return messageList;
-    }
+//    public List<ChatMessageDto> listMessage(Long chatId) {
+//        List<Chat> messages = messageRepository.listMessage(chatId);
+//        List<ChatMessageDto> messageList = messages.stream()
+//                .map(ChatMessageDto::new)
+//                .collect(Collectors.toList());
+//
+//
+//        return messageList;
+//    }
 
 }

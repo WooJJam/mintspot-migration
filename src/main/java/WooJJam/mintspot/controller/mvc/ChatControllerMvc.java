@@ -30,10 +30,8 @@ public class ChatControllerMvc {
             @PathVariable("userId") Long userId,
             Model model,
             HttpServletRequest request) {
-//        HttpSession session = request.getSession();
-        List<Chat> chats = chatService.listChat();
-//        User findUser = userRepository.findById(userId);
-//        session.setAttribute("email", findUser.getEmail());
+        List<Chat> chats = chatService.listChat(userId);
+        System.out.println("chats = " + chats);
         model.addAttribute("chats", chats);
         model.addAttribute("userId", userId);
         return "chat";

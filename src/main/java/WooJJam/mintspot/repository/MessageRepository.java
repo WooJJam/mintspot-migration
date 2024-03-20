@@ -19,12 +19,4 @@ public class MessageRepository {
         message.createMessage(chat, content);
         em.persist(message);
     }
-
-    public List<Chat> listMessage(Long chatId) {
-        return em.createQuery(
-                        "select c from Chat c" +
-                                " where c.id = :chatId", Chat.class)
-                .setParameter("chatId", chatId)
-                .getResultList();
-    }
 }

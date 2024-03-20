@@ -24,4 +24,13 @@ public class ChatRepository {
         return em.createQuery("select c from Chat c", Chat.class)
                 .getResultList();
     }
+
+    public List<Chat> listChats(Long userId) {
+        return em.createQuery(
+                        "select c from Chat c" +
+                                " join fetch c.user cu" +
+                                " where cu.id = :userId", Chat.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
 }

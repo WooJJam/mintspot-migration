@@ -31,7 +31,7 @@ public class ChatService {
         this.chatRepository.create(chat);
     }
 
-    public List<Chat> listChat() {
-        return chatRepository.findAll();
+    public List<Chat> listChat(Long userId) {
+        return chatRepository.listChats(userId);
     }
 }

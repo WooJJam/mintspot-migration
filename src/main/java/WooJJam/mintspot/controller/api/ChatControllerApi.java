@@ -50,9 +50,9 @@ public class ChatControllerApi {
         return this.chatgptService.sendMessage(chatId, chatMessageRequestDto);
     }
 
-    @GetMapping("/{id}")
-    public List<ChatMessageDto> listMessage(@PathVariable("id") Long chatId) {
-        return this.chatgptService.listMessage(chatId);
-    }
+//    @GetMapping("/{id}")
+//    public List<ChatMessageDto> listMessage(@PathVariable("id") Long chatId) {
+//        return this.chatgptService.listMessage(chatId);
+//    }
 
 }
