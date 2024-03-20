@@ -37,13 +37,17 @@ public class UserControllerMvc {
     }
 
     @GetMapping("/login")
-    public String loginRenderView() {
+    public String loginRenderView(Model model) {
+        model.addAttribute("user", new User());
+        System.out.println("login");
         return "login";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserLoginRequestBodyDto userLoginRequestBodyDto) {
+    public String login(@ModelAttribute UserLoginRequestBodyDto userLoginRequestBodyDto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
         Long userId = userService.login(userLoginRequestBodyDto);
+        session.setAttribute("email", userLoginRequestBodyDto.getEmail());
         return "redirect:/chat/"+userId;
     }
 
