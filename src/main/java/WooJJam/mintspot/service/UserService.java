@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,15 +31,15 @@ public class UserService {
         return userRepository.register(user);
     }
 
-    public Long login(UserLoginRequestBodyDto userLoginRequestBodyDto) {
+    public Optional<Long> login(UserLoginRequestBodyDto userLoginRequestBodyDto) {
         String email = userLoginRequestBodyDto.getEmail();
         String password = userLoginRequestBodyDto.getPassword();
         User findUser = userRepository.findByEmail(email);
-        return findUser.getId();
-//        if (findUser != null && findUser.getPassword().equals(password)) {
-//            return ResponseEntity.ok(findUser);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOT EXIST USER");
-//        }
+        if (findUser.getEmail().equals(email) &&
+        findUser.getPassword().equals(password)) {
+            return Optional.of(findUser.getId());
+        } else {
+           return Optional.empty();
+        }
     }
 }

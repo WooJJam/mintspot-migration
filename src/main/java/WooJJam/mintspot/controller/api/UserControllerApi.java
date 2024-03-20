@@ -26,10 +26,10 @@ public class UserControllerApi {
         return userService.register(userRegisterRequestBodyDto);
     }
 
-    @PostMapping("/login")
-    public Long login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
-        return userService.login(userLoginRequestBodyDto);
-    }
+//    @PostMapping("/login")
+//    public Long login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
+//        return userService.login(userLoginRequestBodyDto);
+//    }
 
     @GetMapping("/chat/list")
     public List<UserDto> chatList() {

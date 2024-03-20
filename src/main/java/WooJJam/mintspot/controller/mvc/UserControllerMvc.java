@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -45,10 +47,14 @@ public class UserControllerMvc {
 
     @PostMapping("/login")
     public String login(@ModelAttribute UserLoginRequestBodyDto userLoginRequestBodyDto, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Long userId = userService.login(userLoginRequestBodyDto);
-        session.setAttribute("email", userLoginRequestBodyDto.getEmail());
-        return "redirect:/chat/"+userId;
+        Optional<Long> optionalUserId = userService.login(userLoginRequestBodyDto);
+        if (optionalUserId.isPresent()) {
+            HttpSession session = request.getSession();
+            session.setAttribute("email", userLoginRequestBodyDto.getEmail());
+            return "redirect:/chat/" + optionalUserId.get();
+        } else {
+            return "login";
+        }
     }
 
 }
