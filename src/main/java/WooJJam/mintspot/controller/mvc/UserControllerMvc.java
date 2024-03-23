@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,10 +42,7 @@ public class UserControllerMvc {
             Model model
             ) {
 
-        System.out.println(" ==================== ");
-
         if (bindingResult.hasErrors()) {
-            System.out.println("------------------");
             log.info("error = {}", bindingResult);
             model.addAttribute("gender", Gender.values()); // Gender enum 값 추가
             model.addAttribute("sexual", Sexual.values()); // Sexual enum 값 추가
@@ -62,21 +58,8 @@ public class UserControllerMvc {
     @GetMapping("/login")
     public String loginRenderView(Model model) {
         model.addAttribute("user", new User());
-        System.out.println("login");
         return "login";
     }
-
-//    @PostMapping("/login")
-//    public String login(@ModelAttribute UserLoginRequestBodyDto userLoginRequestBodyDto, HttpServletRequest request) {
-//        Optional<Long> optionalUserId = userService.login(userLoginRequestBodyDto);
-//        if (optionalUserId.isPresent()) {
-//            HttpSession session = request.getSession();
-//            session.setAttribute("email", userLoginRequestBodyDto.getEmail());
-//            return "redirect:/chat/" + optionalUserId.get();
-//        } else {
-//            return "login";
-//        }
-//    }
 
     @PostMapping("/login")
     public String login(
@@ -93,7 +76,7 @@ public class UserControllerMvc {
 
         if (optionalUserId.isPresent()) {
             HttpSession session = request.getSession();
-            session.setAttribute("email", userLoginRequestBodyDto.getEmail());
+            session.setAttribute("user", userLoginRequestBodyDto);
             return "redirect:/chat/" + optionalUserId.get();
         } else {
             return "login";

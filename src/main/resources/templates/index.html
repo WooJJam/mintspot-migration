@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mint Spot</title>
+    <style>
+        body {
+            background-color: #3E3B47;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        .submit-button {
+            background-color: #8265A7;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div>
+    <h1>Mint Spot에 오신걸 환영합니다!!</h1>
+</div>
+<div>
+    <p th:if="${session.user == null}">
+        <a class="submit-button">로그인</a>
+    </p>
+    <p th:if="${session.user != null}">
+        <span th:text="${session.user.email}"></span>
+    </p>
+</div>
+
+</body>
+</html>

@@ -31,7 +31,6 @@ public class ChatControllerMvc {
             Model model,
             HttpServletRequest request) {
         List<Chat> chats = chatService.listChat(userId);
-        System.out.println("chats = " + chats);
         model.addAttribute("chats", chats);
         model.addAttribute("userId", userId);
         return "chat";
