@@ -42,4 +42,8 @@ public class UserService {
            return Optional.empty();
         }
     }
+
+    public User findOne(Long userId) {
+        return userRepository.findById(userId);
+    }
 }

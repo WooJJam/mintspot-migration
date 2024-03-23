@@ -75,9 +75,11 @@ public class UserControllerMvc {
         Optional<Long> optionalUserId = userService.login(userLoginRequestBodyDto);
 
         if (optionalUserId.isPresent()) {
+            Long userId = optionalUserId.get();
+            User findUser = userService.findOne(userId);
             HttpSession session = request.getSession();
-            session.setAttribute("user", userLoginRequestBodyDto);
-            return "redirect:/chat/" + optionalUserId.get();
+            session.setAttribute("user", findUser);
+            return "redirect:/chat/" + userId;
         } else {
             return "login";
         }

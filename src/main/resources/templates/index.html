@@ -17,6 +17,7 @@
             padding: 10px;
             border: none;
             border-radius: 5px;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -28,10 +29,12 @@
 </div>
 <div>
     <p th:if="${session.user == null}">
-        <a class="submit-button">로그인</a>
+        <a class="submit-button" href="/user/register">회원가입</a>
+        <a class="submit-button" href="/user/login">로그인</a>
     </p>
     <p th:if="${session.user != null}">
-        <span th:text="${session.user.email}"></span>
+        <span th:text="|${session.user.email} 님 환영합니다!|"></span>
+    <a class="submit-button" th:href="@{/chat/{user_id}(user_id=${session.user.id})}">채팅 시작</a>
     </p>
 </div>
 
