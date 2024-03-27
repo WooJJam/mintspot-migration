@@ -1,6 +1,7 @@
 package WooJJam.mintspot.repository;
 
 import WooJJam.mintspot.domain.chat.Chat;
+import WooJJam.mintspot.domain.user.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -27,9 +28,9 @@ public class ChatRepository {
 
     public List<Chat> listChats(Long userId) {
         return em.createQuery(
-                        "select c from Chat c" +
-                                " join fetch c.user cu" +
-                                " where cu.id = :userId", Chat.class)
+                        "select uc from User u" +
+                                " join u.chats uc" +
+                                " where u.id = :userId", Chat.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
