@@ -4,6 +4,8 @@ import WooJJam.mintspot.domain.chat.Chat;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 public class Message {
@@ -19,9 +21,12 @@ public class Message {
     @Column(length = 1500)
     private String content;
 
+    private LocalDateTime createdAt;
+
     public void createMessage(Chat chat, String content) {
         this.chat = chat;
         this.content = content;
         this.chat.getMessages().add(this);
+        this.createdAt = LocalDateTime.now();
     }
 }

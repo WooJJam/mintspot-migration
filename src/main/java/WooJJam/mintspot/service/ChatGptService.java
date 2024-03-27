@@ -53,7 +53,7 @@ public class ChatGptService {
         String botMessage = jsonParseResponseMessage(chatMessageResponse);
         Chat findChat = chatRepository.findById(chatId);
         botRepository.saveBotMessage(findChat, botMessage);
-//        messageRepository.saveMessage(findChat, message);
+        messageRepository.saveMessage(findChat, chatMessageRequestDto.getUserContent());
         return botMessage;
     }
 
