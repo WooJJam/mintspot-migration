@@ -8,6 +8,7 @@ import WooJJam.mintspot.dto.chat.ChatDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
 import WooJJam.mintspot.dto.gpt.ChatRequestMsgDto;
+import WooJJam.mintspot.repository.BotRepository;
 import WooJJam.mintspot.repository.ChatRepository;
 import WooJJam.mintspot.repository.MessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,6 +33,7 @@ public class ChatGptService {
     private final ChatGptConfig chatGptConfig;
     private final ChatRepository chatRepository;
     private final MessageRepository messageRepository;
+    private final BotRepository botRepository;
 
     @Transactional
     public String sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
@@ -48,10 +50,11 @@ public class ChatGptService {
                         String.class
                 );
 
-        String message = jsonParseResponseMessage(chatMessageResponse);
+        String botMessage = jsonParseResponseMessage(chatMessageResponse);
         Chat findChat = chatRepository.findById(chatId);
-        messageRepository.saveMessage(findChat, message);
-        return message;
+        botRepository.saveBotMessage(findChat, botMessage);
+//        messageRepository.saveMessage(findChat, message);
+        return botMessage;
     }
 
     private String jsonParseResponseMessage(ResponseEntity<String> chatMessageResponse) throws ParseException {

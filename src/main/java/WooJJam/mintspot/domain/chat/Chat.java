@@ -1,6 +1,7 @@
 package WooJJam.mintspot.domain.chat;
 
 import WooJJam.mintspot.domain.Message;
+import WooJJam.mintspot.domain.Bot;
 import WooJJam.mintspot.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,6 +27,9 @@ public class Chat {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "chat")
     private List<Message> messages = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chat")
+    private List<Bot> bot = new ArrayList<>();
 
     public void createChatRoom(String title, Category category, User user) {
         this.title = title;
