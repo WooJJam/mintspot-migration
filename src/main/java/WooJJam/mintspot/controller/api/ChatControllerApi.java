@@ -2,6 +2,7 @@ package WooJJam.mintspot.controller.api;
 
 import WooJJam.mintspot.domain.Message;
 //import WooJJam.mintspot.dto.ChatMessageDto;
+import WooJJam.mintspot.dto.BotMessageDto;
 import WooJJam.mintspot.dto.ChatMessageDto;
 import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
@@ -51,7 +52,7 @@ public class ChatControllerApi {
     }
 
     @PostMapping("/{id}/send-message")
-    public String sendMessage(
+    public BotMessageDto sendMessage(
             @PathVariable("id") Long chatId,
             @RequestBody ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         return this.chatgptService.sendMessage(chatId, chatMessageRequestDto);

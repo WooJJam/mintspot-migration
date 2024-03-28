@@ -13,9 +13,10 @@ public class BotRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void saveBotMessage(Chat chat, String content) {
+    public Bot saveBotMessage(Chat chat, String content) {
         Bot bot = new Bot();
         bot.createBot(chat, content);
         em.persist(bot);
+        return bot;
     }
 }

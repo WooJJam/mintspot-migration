@@ -14,10 +14,11 @@ public class MessageRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void saveMessage(Chat chat, String content) {
+    public Message saveMessage(Chat chat, String content) {
         Message message = new Message();
         message.createMessage(chat, content);
         em.persist(message);
+        return message;
     }
 
     public List<Message> listMessage(Long chatId) {

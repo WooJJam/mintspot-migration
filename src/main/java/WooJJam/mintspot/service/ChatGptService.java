@@ -2,8 +2,10 @@ package WooJJam.mintspot.service;
 
 import WooJJam.mintspot.config.ChatGptConfig;
 import WooJJam.mintspot.config.RestTemplateConfig;
+import WooJJam.mintspot.domain.Bot;
 import WooJJam.mintspot.domain.Message;
 import WooJJam.mintspot.domain.chat.Chat;
+import WooJJam.mintspot.dto.BotMessageDto;
 import WooJJam.mintspot.dto.ChatMessageDto;
 import WooJJam.mintspot.dto.chat.ChatDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
@@ -38,7 +40,7 @@ public class ChatGptService {
     private final BotRepository botRepository;
 
     @Transactional
-    public String sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
+    public BotMessageDto sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         HttpHeaders headers = chatGptConfig.buildMessageHeader();
         String systemMessage = chatGptConfig.getSystemMessage(chatMessageRequestDto.getGender(), chatMessageRequestDto.getCategory());
         ChatCompletionDto chatCompletionDto = createRequestMessages(chatMessageRequestDto.getUserContent(), systemMessage);
@@ -54,9 +56,9 @@ public class ChatGptService {
 
         String botMessage = jsonParseResponseMessage(chatMessageResponse);
         Chat findChat = chatRepository.findById(chatId);
-        botRepository.saveBotMessage(findChat, botMessage);
-        messageRepository.saveMessage(findChat, chatMessageRequestDto.getUserContent());
-        return botMessage;
+        Bot savedBot = botRepository.saveBotMessage(findChat, botMessage);
+        Message savedMessage = messageRepository.saveMessage(findChat, chatMessageRequestDto.getUserContent());
+        return new BotMessageDto(savedMessage.getContent(), savedBot.getContent(), savedMessage.getCreatedAt());
     }
 
     private String jsonParseResponseMessage(ResponseEntity<String> chatMessageResponse) throws ParseException {
