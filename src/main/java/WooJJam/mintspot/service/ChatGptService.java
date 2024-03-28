@@ -2,6 +2,7 @@ package WooJJam.mintspot.service;
 
 import WooJJam.mintspot.config.ChatGptConfig;
 import WooJJam.mintspot.config.RestTemplateConfig;
+import WooJJam.mintspot.domain.Message;
 import WooJJam.mintspot.domain.chat.Chat;
 import WooJJam.mintspot.dto.ChatMessageDto;
 import WooJJam.mintspot.dto.chat.ChatDto;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -73,14 +75,11 @@ public class ChatGptService {
         return new ChatCompletionDto(chatGptConfig.model, messages);
     }
 
-//    public List<ChatMessageDto> listMessage(Long chatId) {
-//        List<Chat> messages = messageRepository.listMessage(chatId);
-//        List<ChatMessageDto> messageList = messages.stream()
-//                .map(ChatMessageDto::new)
-//                .collect(Collectors.toList());
-//
-//
-//        return messageList;
-//    }
+    public List<ChatMessageDto> listMessage(Long chatId) {
+        List<Message> messages = messageRepository.listMessage(chatId);
+        List<ChatMessageDto> userMessageList = messages.stream()
+                .map(message -> new ChatMessageDto(message.getId(), message.getContent(), message.getCreatedAt())).collect(Collectors.toList());
+        return userMessageList;
+    }
 
 }
