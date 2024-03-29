@@ -1,10 +1,9 @@
 package WooJJam.mintspot.controller.api;
 
-import WooJJam.mintspot.domain.Message;
 //import WooJJam.mintspot.dto.ChatMessageDto;
 import WooJJam.mintspot.dto.BotMessageDto;
-import WooJJam.mintspot.dto.ChatMessageDto;
-import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
+        import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
+import WooJJam.mintspot.dto.chat.ChatDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.service.ChatGptService;
 import WooJJam.mintspot.service.ChatService;
@@ -29,6 +28,7 @@ public class ChatControllerApi {
     }
 
     /**
+     * @return
      * @INPUT {
      * "model": "gpt-3.5-turbo",
      * "messages": [
@@ -42,12 +42,12 @@ public class ChatControllerApi {
      * }
      * ]
      * }
-     **/
+     */
 
 //    @GetMapping("/{id}")
 
     @GetMapping("/{chatId}")
-    public List<ChatMessageDto> listMessage(@PathVariable("chatId") Long chatId) {
+    public List<ChatDto> listMessage(@PathVariable("chatId") Long chatId) {
         return this.chatgptService.listMessage(chatId);
     }
 

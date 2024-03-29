@@ -21,12 +21,14 @@ public class MessageRepository {
         return message;
     }
 
-    public List<Message> listMessage(Long chatId) {
+    public Chat listMessage(Long chatId) {
         return em.createQuery(
-                "select cm from Chat c" +
-                        " join c.messages cm" +
-                        " where c.id =: chatId", Message.class)
+                "select distinct c from Chat c" +
+                        " join fetch c.messages m" +
+                        " join c.bot b" +
+                        " where c.id =: chatId"
+                        , Chat.class)
                 .setParameter("chatId", chatId)
-                .getResultList();
+                .getSingleResult();
     }
 }

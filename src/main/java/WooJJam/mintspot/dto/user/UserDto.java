@@ -3,7 +3,7 @@ package WooJJam.mintspot.dto.user;
 import WooJJam.mintspot.domain.user.Gender;
 import WooJJam.mintspot.domain.user.Sexual;
 import WooJJam.mintspot.domain.user.User;
-import WooJJam.mintspot.dto.chat.ChatDto;
+import WooJJam.mintspot.dto.chat.ChatListDto;
 import lombok.Data;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class UserDto {
     private String password;
     private Gender gender;
     private Sexual sexual;
-    private List<ChatDto> chats;
+    private List<ChatListDto> chats;
 
     public UserDto(User user) {
         this.userId = user.getId();
@@ -26,7 +26,7 @@ public class UserDto {
         this.gender = user.getGender();
         this.sexual = user.getSexual();
         this.chats = user.getChats().stream()
-                .map(chat -> new ChatDto(chat.getTitle(), chat.getCategory()))
+                .map(chat -> new ChatListDto(chat.getTitle(), chat.getCategory()))
                 .collect(Collectors.toList());
     }
 }

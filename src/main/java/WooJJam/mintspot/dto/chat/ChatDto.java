@@ -1,15 +1,24 @@
 package WooJJam.mintspot.dto.chat;
 
-import WooJJam.mintspot.domain.chat.Category;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@Getter @Setter
 public class ChatDto {
+    private int index;
     private String title;
-    private Category category;
+    private ChatMessageDto userMessage;
+    private ChatMessageDto botMessage;
 
-    public ChatDto(String title, Category category) {
+    public ChatDto(int index, String title, ChatMessageDto userMessage, ChatMessageDto botMessage) {
+        this.index = index;
         this.title = title;
-        this.category = category;
+        this.userMessage = userMessage;
+        this.botMessage = botMessage;
     }
 }
