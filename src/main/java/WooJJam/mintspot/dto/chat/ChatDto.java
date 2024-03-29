@@ -1,5 +1,7 @@
 package WooJJam.mintspot.dto.chat;
 
+import WooJJam.mintspot.domain.Bot;
+import WooJJam.mintspot.domain.Message;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +17,10 @@ public class ChatDto {
     private ChatMessageDto userMessage;
     private ChatMessageDto botMessage;
 
-    public ChatDto(int index, String title, ChatMessageDto userMessage, ChatMessageDto botMessage) {
+    public ChatDto(int index, String title, Message userMessage, Bot botMessage) {
         this.index = index;
         this.title = title;
-        this.userMessage = userMessage;
-        this.botMessage = botMessage;
+        this.userMessage = new ChatMessageDto(userMessage.getContent(), userMessage.getCreatedAt());
+        this.botMessage = new ChatMessageDto(botMessage.getContent(), botMessage.getCreatedAt());
     }
 }

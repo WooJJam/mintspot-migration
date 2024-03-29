@@ -7,7 +7,6 @@ import WooJJam.mintspot.domain.Message;
 import WooJJam.mintspot.domain.chat.Chat;
 import WooJJam.mintspot.dto.BotMessageDto;
 import WooJJam.mintspot.dto.chat.ChatDto;
-import WooJJam.mintspot.dto.chat.ChatListDto;
 import WooJJam.mintspot.dto.chat.ChatMessageDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
@@ -25,10 +24,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -83,15 +81,12 @@ public class ChatGptService {
         Chat chat = messageRepository.listMessage(chatId);
         List<Message> userMessages = chat.getMessages();
         List<Bot> botMessages = chat.getBot();
-        List<ChatDto> chatMessage = new ArrayList<>();
 
-        for (int i = 0; i < userMessages.size(); i++) {
-            Message message = userMessages.get(i);
-            Bot bot = botMessages.get(i);
-            chatMessage.add(new ChatDto(i, chat.getTitle(), new ChatMessageDto(message.getContent(), message.getCreatedAt()), new ChatMessageDto(bot.getContent(), bot.getCreatedAt())));
-        }
-        System.out.println(" =============== ");
-        return chatMessage;
+        return IntStream.range(0, Math.min(userMessages.size(), botMessages.size()))
+                .mapToObj(i -> {
+                    Message userMessage = userMessages.get(i);
+                    Bot botMessage = botMessages.get(i);
+                    return new ChatDto(i, chat.getTitle(), userMessage, botMessage);
+                }).collect(Collectors.toList());
     }
-
 }
