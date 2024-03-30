@@ -1,7 +1,6 @@
 package WooJJam.mintspot.repository;
 
 import WooJJam.mintspot.domain.chat.Chat;
-import WooJJam.mintspot.domain.user.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -34,4 +33,16 @@ public class ChatRepository {
                 .setParameter("userId", userId)
                 .getResultList();
     }
+
+    public Chat newestListChatMessage(Long chatId) {
+        return em.createQuery(
+                        "select c from Chat c" +
+                                " join fetch c.messages m" +
+                                " join c.bot b" +
+                                " where c.id = :chatId" +
+                                " order by m.createdAt desc", Chat.class)
+                .setParameter("chatId", chatId)
+                .getSingleResult();
+    }
+
 }

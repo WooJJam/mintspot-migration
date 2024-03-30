@@ -7,7 +7,6 @@ import WooJJam.mintspot.domain.Message;
 import WooJJam.mintspot.domain.chat.Chat;
 import WooJJam.mintspot.dto.BotMessageDto;
 import WooJJam.mintspot.dto.chat.ChatDto;
-import WooJJam.mintspot.dto.chat.ChatMessageDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
 import WooJJam.mintspot.dto.gpt.ChatRequestMsgDto;
@@ -16,6 +15,7 @@ import WooJJam.mintspot.repository.ChatRepository;
 import WooJJam.mintspot.repository.MessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -41,10 +42,16 @@ public class ChatGptService {
 
     @Transactional
     public BotMessageDto sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
+
         HttpHeaders headers = chatGptConfig.buildMessageHeader();
         String systemMessage = chatGptConfig.getSystemMessage(chatMessageRequestDto.getGender(), chatMessageRequestDto.getCategory());
-        ChatCompletionDto chatCompletionDto = createRequestMessages(chatMessageRequestDto.getUserContent(), systemMessage);
+
+        String newestMessage = newestListChatMessage(chatId);
+        String userMessage = newestMessage + chatMessageRequestDto.getUserContent();
+        ChatCompletionDto chatCompletionDto = createRequestMessages(userMessage, systemMessage);
+
         HttpEntity<ChatCompletionDto> messageRequestEntity = chatGptConfig.buildMessageBody(chatCompletionDto, headers);
+
         ResponseEntity<String> chatMessageResponse = restTemplateConfig
                 .restTemplate()
                 .exchange(
@@ -55,8 +62,13 @@ public class ChatGptService {
                 );
 
         String botMessage = jsonParseResponseMessage(chatMessageResponse);
+
         Chat findChat = chatRepository.findById(chatId);
         Bot savedBot = botRepository.saveBotMessage(findChat, botMessage);
+
+        log.info("User Message = {}", chatCompletionDto);
+        log.info("Chat Message = {}", chatMessageResponse);
+
         Message savedMessage = messageRepository.saveMessage(findChat, chatMessageRequestDto.getUserContent());
         return new BotMessageDto(savedMessage.getContent(), savedBot.getContent(), savedMessage.getCreatedAt());
     }
@@ -71,9 +83,9 @@ public class ChatGptService {
     }
 
     private ChatCompletionDto createRequestMessages(String userMessage, String systemMessage) {
-        ChatRequestMsgDto systemRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.systemRole, systemMessage);
-        ChatRequestMsgDto userRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.userRole, userMessage);
-        List<ChatRequestMsgDto> messages = List.of(systemRequestMsgDto, userRequestMsgDto);
+        ChatRequestMsgDto assistantRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.assistantRole, systemMessage);
+        ChatRequestMsgDto userRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.userRole,  userMessage);
+        List<ChatRequestMsgDto> messages = List.of(assistantRequestMsgDto, userRequestMsgDto);
         return new ChatCompletionDto(chatGptConfig.model, messages);
     }
 
@@ -88,5 +100,18 @@ public class ChatGptService {
                     Bot botMessage = botMessages.get(i);
                     return new ChatDto(i, chat.getTitle(), userMessage, botMessage);
                 }).collect(Collectors.toList());
+    }
+
+    public String newestListChatMessage(Long chatId) {
+        Chat chat = this.chatRepository.newestListChatMessage(chatId);
+        List<Message> userMessages = chat.getMessages();
+        List<Bot> botMessages = chat.getBot();
+
+        return IntStream.range(0, Math.min(userMessages.size(), 5))
+                .mapToObj(i -> {
+                    Message message = userMessages.get(i);
+                    Bot bot = botMessages.get(i);
+                    return "USER: " + message.getContent() + "\n성숙희: "+ bot.getContent();
+                }).collect(Collectors.joining("\n"));
     }
 }

@@ -1,19 +1,20 @@
 package WooJJam.mintspot.controller.api;
 
-//import WooJJam.mintspot.dto.ChatMessageDto;
 import WooJJam.mintspot.dto.BotMessageDto;
-        import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
+import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
 import WooJJam.mintspot.dto.chat.ChatDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.service.ChatGptService;
 import WooJJam.mintspot.service.ChatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
@@ -26,25 +27,6 @@ public class ChatControllerApi {
     public void createChat(@RequestBody ChatCreateRequestBodyDto chatCreateRequestBodyDto) {
         this.chatService.createChat(chatCreateRequestBodyDto);
     }
-
-    /**
-     * @return
-     * @INPUT {
-     * "model": "gpt-3.5-turbo",
-     * "messages": [
-     * {
-     * "role": "system",
-     * "content": "넌 한국어로만 대답하는 프로그래밍 봇이야."
-     * },
-     * {
-     * "role":"user",
-     * "content":"자바가 뭐야?"
-     * }
-     * ]
-     * }
-     */
-
-//    @GetMapping("/{id}")
 
     @GetMapping("/{chatId}")
     public List<ChatDto> listMessage(@PathVariable("chatId") Long chatId) {
