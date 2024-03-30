@@ -26,7 +26,8 @@ public class MessageRepository {
                 "select distinct c from Chat c" +
                         " join fetch c.messages m" +
                         " join c.bot b" +
-                        " where c.id =: chatId"
+                        " where c.id =: chatId" +
+                        " order by m.createdAt ASC "
                         , Chat.class)
                 .setParameter("chatId", chatId)
                 .getSingleResult();
