@@ -13,6 +13,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,8 +30,11 @@ public class ChatControllerApi {
     }
 
     @GetMapping("/{chatId}")
-    public List<ChatDto> listMessage(@PathVariable("chatId") Long chatId) {
-        return this.chatgptService.listMessage(chatId);
+    public List<ChatDto> listMessage(
+            @PathVariable("chatId") Long chatId,
+            @RequestBody Map<String, Integer> range) {
+        System.out.println("range = " + range);
+        return this.chatgptService.listMessage(chatId, range.get("offset"), range.get("limit"));
     }
 
     @PostMapping("/{id}/send-message")

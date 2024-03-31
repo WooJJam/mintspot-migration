@@ -1,12 +1,15 @@
 package WooJJam.mintspot.repository;
 
+import WooJJam.mintspot.domain.Bot;
 import WooJJam.mintspot.domain.Message;
 import WooJJam.mintspot.domain.chat.Chat;
+import WooJJam.mintspot.dto.chat.ChatDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class MessageRepository {
@@ -21,15 +24,14 @@ public class MessageRepository {
         return message;
     }
 
-    public Chat listMessage(Long chatId) {
-        return em.createQuery(
-                "select distinct c from Chat c" +
-                        " join fetch c.messages m" +
-                        " join c.bot b" +
-                        " where c.id =: chatId" +
-                        " order by m.createdAt ASC "
-                        , Chat.class)
-                .setParameter("chatId", chatId)
-                .getSingleResult();
+        public List<Message> findUserMessage(Long chatId, int offset, int limit) {
+            return em.createQuery(
+                            "select m from Message m" +
+                                    " join fetch m.chat c" +
+                                    " where c.id =:chatId", Message.class)
+                    .setParameter("chatId", chatId)
+                    .setFirstResult(offset)
+                    .setMaxResults(limit)
+                    .getResultList();
+        }
     }
-}

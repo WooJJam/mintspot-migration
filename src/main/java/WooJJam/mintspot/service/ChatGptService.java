@@ -89,16 +89,15 @@ public class ChatGptService {
         return new ChatCompletionDto(chatGptConfig.model, messages);
     }
 
-    public List<ChatDto> listMessage(Long chatId) {
-        Chat chat = messageRepository.listMessage(chatId);
-        List<Message> userMessages = chat.getMessages();
-        List<Bot> botMessages = chat.getBot();
+    public List<ChatDto> listMessage(Long chatId, int offset, int limit) {
+        List<Message> userMessages = messageRepository.findUserMessage(chatId, offset, limit);
+        List<Bot> botMessages = botRepository.findBotMessage(chatId, offset, limit);
 
         return IntStream.range(0, Math.min(userMessages.size(), botMessages.size()))
                 .mapToObj(i -> {
                     Message userMessage = userMessages.get(i);
                     Bot botMessage = botMessages.get(i);
-                    return new ChatDto(i, chat.getTitle(), userMessage, botMessage);
+                    return new ChatDto(i, userMessage.getChat().getTitle(), userMessage, botMessage);
                 }).collect(Collectors.toList());
     }
 
