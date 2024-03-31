@@ -104,6 +104,9 @@ public class ChatGptService {
 
     public String newestListChatMessage(Long chatId) {
         Chat chat = this.chatRepository.newestListChatMessage(chatId);
+        if (chat == null) {
+            return "";
+        }
         List<Message> userMessages = chat.getMessages();
         List<Bot> botMessages = chat.getBot();
 
