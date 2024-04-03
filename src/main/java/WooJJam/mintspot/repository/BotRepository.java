@@ -22,14 +22,12 @@ public class BotRepository {
         return bot;
     }
 
-    public List<Bot> findBotMessage (Long chatId, int offset, int limit) {
+    public List<Bot> findBotMessage (Long chatId) {
         return em.createQuery(
                         "select b from Bot b" +
                                 " join fetch b.chat c" +
                                 " where c.id =:chatId", Bot.class)
                 .setParameter("chatId", chatId)
-                .setFirstResult(offset)
-                .setMaxResults(limit)
                 .getResultList();
     }
 }

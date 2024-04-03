@@ -24,14 +24,12 @@ public class MessageRepository {
         return message;
     }
 
-        public List<Message> findUserMessage(Long chatId, int offset, int limit) {
+        public List<Message> findUserMessage(Long chatId) {
             return em.createQuery(
                             "select m from Message m" +
                                     " join fetch m.chat c" +
                                     " where c.id =:chatId", Message.class)
                     .setParameter("chatId", chatId)
-                    .setFirstResult(offset)
-                    .setMaxResults(limit)
                     .getResultList();
         }
     }
