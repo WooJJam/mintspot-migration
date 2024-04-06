@@ -1,9 +1,5 @@
 package WooJJam.mintspot.config;
 
-import WooJJam.mintspot.domain.chat.Chat;
-import WooJJam.mintspot.dto.chat.RedisChatDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,8 +39,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate <?, ?> testRedisTemplate() {
-        RedisTemplate<String, RedisChatDto> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate <String, ?> testRedisTemplate() {
+        RedisTemplate<String, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
         // 기본 직렬화( JSON 형식) Object <=> JSON
@@ -61,13 +57,6 @@ public class RedisConfig {
 
         return redisTemplate;
     }
-
-//    @Bean
-//    public ObjectMapper registerJavaTimeModule() {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.registerModule(new JavaTimeModule());
-//        return objectMapper;
-//    }
 
     @Bean
     public RedisCacheManager testCacheManager(RedisConnectionFactory connectionFactory) {

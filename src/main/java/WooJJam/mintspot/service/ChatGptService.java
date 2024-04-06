@@ -6,7 +6,6 @@ import WooJJam.mintspot.domain.Bot;
 import WooJJam.mintspot.domain.Message;
 import WooJJam.mintspot.domain.chat.Chat;
 import WooJJam.mintspot.dto.BotMessageDto;
-import WooJJam.mintspot.dto.chat.ChatDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.chat.RedisChatDto;
 import WooJJam.mintspot.dto.gpt.ChatCompletionDto;
@@ -22,10 +21,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ public class ChatGptService {
     private final MessageRepository messageRepository;
     private final BotRepository botRepository;
     private final DataChatRepository dataChatRepository;
+    private final RedisTemplate<String, List<RedisChatDto>> redisTemplate;
     @Transactional
     public BotMessageDto sendMessage(Long chatId, ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
 
@@ -92,32 +94,21 @@ public class ChatGptService {
         return new ChatCompletionDto(chatGptConfig.model, messages);
     }
 
-    public List<ChatDto> listMessage(Long chatId) {
-        List<Message> userMessages = messageRepository.findUserMessage(chatId);
-        List<Bot> botMessages = botRepository.findBotMessage(chatId);
-
-        return IntStream.range(0, Math.min(userMessages.size(), botMessages.size()))
-                .mapToObj(i -> {
-                    Message userMessage = userMessages.get(i);
-                    Bot botMessage = botMessages.get(i);
-                    return new ChatDto(i, userMessage.getChat().getTitle(), userMessage, botMessage);
-                }).collect(Collectors.toList());
-    }
-
-    public List<RedisChatDto> listMessageCache(Long chatId) {
+    public List<RedisChatDto> listMessage(Long chatId) {
         Optional<Chat> findChat = dataChatRepository.findById(chatId);
         if (findChat.isPresent()) {
             List<Message> userMessages = findChat.get().getMessages();
             List<Bot> botMessages = findChat.get().getBot();
 
-            return IntStream.range(0, Math.min(userMessages.size(), botMessages.size()))
+            List<RedisChatDto> chatMessages = IntStream.range(0, Math.min(userMessages.size(), botMessages.size()))
                     .mapToObj(i -> {
                         Message userMessage = userMessages.get(i);
                         Bot botMessage = botMessages.get(i);
                         return new RedisChatDto(i, userMessage.getChat().getTitle(), userMessage.getContent(), botMessage.getContent());
                     }).collect(Collectors.toList());
-        }
-        else {
+            redisTemplate.opsForValue().set("chat::" + chatId, chatMessages, Duration.ofMinutes(10L));
+            return chatMessages;
+        } else {
             return null;
         }
     }
@@ -134,7 +125,7 @@ public class ChatGptService {
                 .mapToObj(i -> {
                     Message message = userMessages.get(i);
                     Bot bot = botMessages.get(i);
-                    return "USER: " + message.getContent() + "\n성숙희: "+ bot.getContent();
+                    return "USER: " + message.getContent() + "\nCHAT BOT: " + bot.getContent();
                 }).collect(Collectors.joining("\n"));
     }
 }

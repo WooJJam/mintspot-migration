@@ -7,10 +7,10 @@ import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
 import WooJJam.mintspot.repository.UserRepository;
 import WooJJam.mintspot.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,10 +26,10 @@ public class UserControllerApi {
         return userService.register(userRegisterRequestBodyDto);
     }
 
-//    @PostMapping("/login")
-//    public Long login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
-//        return userService.login(userLoginRequestBodyDto);
-//    }
+    @PostMapping("/login")
+    public Optional<Long> login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
+        return userService.login(userLoginRequestBodyDto);
+    }
 
     @GetMapping("/chat/list")
     public List<UserDto> chatList() {

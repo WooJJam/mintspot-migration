@@ -2,7 +2,6 @@ package WooJJam.mintspot.controller.api;
 
 import WooJJam.mintspot.dto.BotMessageDto;
 import WooJJam.mintspot.dto.chat.ChatCreateRequestBodyDto;
-import WooJJam.mintspot.dto.chat.ChatDto;
 import WooJJam.mintspot.dto.chat.ChatMessageRequestDto;
 import WooJJam.mintspot.dto.chat.RedisChatDto;
 import WooJJam.mintspot.service.ChatGptService;
@@ -11,11 +10,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -25,6 +22,7 @@ public class ChatControllerApi {
 
     private final ChatService chatService;
     private final ChatGptService chatgptService;
+    private final RedisTemplate<String, List<RedisChatDto>> redisTemplate;
 
     @PostMapping("/create")
     public void createChat(@RequestBody ChatCreateRequestBodyDto chatCreateRequestBodyDto) {
@@ -32,14 +30,13 @@ public class ChatControllerApi {
     }
 
     @GetMapping("/{chatId}")
-    public List<ChatDto> listMessage(@PathVariable("chatId") Long chatId) {
-        return this.chatgptService.listMessage(chatId);
-    }
-
-    @GetMapping("/cache/{chatId}")
-    @Cacheable(key = "#chatId", cacheNames = "chat")
-    public List<RedisChatDto> listMessageCache(@PathVariable("chatId") Long chatId) {
-        return this.chatgptService.listMessageCache(chatId);
+    public List<RedisChatDto> listMessage(@PathVariable("chatId") Long chatId) {
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("chat::"+chatId))) {
+            return redisTemplate.opsForValue().get("chat::"+chatId);
+        }
+        else {
+            return this.chatgptService.listMessage(chatId);
+        }
     }
 
     @PostMapping("/{id}/send-message")
@@ -48,5 +45,4 @@ public class ChatControllerApi {
             @RequestBody ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         return this.chatgptService.sendMessage(chatId, chatMessageRequestDto);
     }
-
 }

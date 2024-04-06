@@ -38,7 +38,7 @@ public class ChatRepository {
     public Chat newestListChatMessage(Long chatId) {
         try {
             return em.createQuery(
-                            "select c from Chat c" +
+                            "select distinct c from Chat c" +
                                     " join fetch c.messages m" +
                                     " join c.bot b" +
                                     " where c.id = :chatId" +
