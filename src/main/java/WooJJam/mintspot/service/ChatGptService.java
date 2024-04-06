@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,9 +52,9 @@ public class ChatGptService {
         HttpHeaders headers = chatGptConfig.buildMessageHeader();
         String systemMessage = chatGptConfig.getSystemMessage(chatMessageRequestDto.getGender(), chatMessageRequestDto.getCategory());
 
-        String newestMessage = newestListChatMessage(chatId);
-        String userMessage = newestMessage + chatMessageRequestDto.getUserContent();
-        ChatCompletionDto chatCompletionDto = createRequestMessages(userMessage, systemMessage);
+        String assistantMessage = cacheNewestListChatMessage(chatId);
+        String userMessage = chatMessageRequestDto.getUserContent();
+        ChatCompletionDto chatCompletionDto = createRequestMessages(userMessage, assistantMessage, systemMessage);
 
         HttpEntity<ChatCompletionDto> messageRequestEntity = chatGptConfig.buildMessageBody(chatCompletionDto, headers);
 
@@ -87,10 +88,11 @@ public class ChatGptService {
         return String.valueOf(message.get("content"));
     }
 
-    private ChatCompletionDto createRequestMessages(String userMessage, String systemMessage) {
-        ChatRequestMsgDto assistantRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.assistantRole, systemMessage);
+    private ChatCompletionDto createRequestMessages(String userMessage, String assistantMessage, String systemMessage) {
+        ChatRequestMsgDto systemRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.systemRole, systemMessage);
+        ChatRequestMsgDto assistantRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.assistantRole, assistantMessage);
         ChatRequestMsgDto userRequestMsgDto = new ChatRequestMsgDto(chatGptConfig.userRole,  userMessage);
-        List<ChatRequestMsgDto> messages = List.of(assistantRequestMsgDto, userRequestMsgDto);
+        List<ChatRequestMsgDto> messages = List.of(systemRequestMsgDto, assistantRequestMsgDto, userRequestMsgDto);
         return new ChatCompletionDto(chatGptConfig.model, messages);
     }
 
@@ -106,7 +108,7 @@ public class ChatGptService {
                         Bot botMessage = botMessages.get(i);
                         return new RedisChatDto(i, userMessage.getChat().getTitle(), userMessage.getContent(), botMessage.getContent());
                     }).collect(Collectors.toList());
-            redisTemplate.opsForValue().set("chat::" + chatId, chatMessages, Duration.ofMinutes(10L));
+            redisTemplate.opsForValue().set("chat::" + chatId, chatMessages, Duration.ofMinutes(30L));
             return chatMessages;
         } else {
             return null;
@@ -114,12 +116,8 @@ public class ChatGptService {
     }
 
     public String newestListChatMessage(Long chatId) {
-        Chat chat = this.chatRepository.newestListChatMessage(chatId);
-        if (chat == null) {
-            return "";
-        }
-        List<Message> userMessages = chat.getMessages();
-        List<Bot> botMessages = chat.getBot();
+        List<Message> userMessages = this.chatRepository.newestListUserMessage(chatId);
+        List<Bot> botMessages = this.chatRepository.newestListBotMessage(chatId);
 
         return IntStream.range(0, Math.min(userMessages.size(), 5))
                 .mapToObj(i -> {
@@ -127,5 +125,17 @@ public class ChatGptService {
                     Bot bot = botMessages.get(i);
                     return "USER: " + message.getContent() + "\nCHAT BOT: " + bot.getContent();
                 }).collect(Collectors.joining("\n"));
+    }
+
+    public String cacheNewestListChatMessage(Long chatId) {
+
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("chat::" + chatId))) {
+            List<RedisChatDto> redisChatDtos = redisTemplate.opsForValue().get("chat::" + chatId);
+            if (redisChatDtos != null) {
+                Collections.reverse(redisChatDtos);
+                return redisChatDtos.stream().limit(5).map(redisChatDto -> "USER: " + redisChatDto.getUserMessage() + "\nCHAT BOT: " + redisChatDto.getBotMessage()).collect(Collectors.joining("\n"));
+            }
+        }
+        return "AB";
     }
 }

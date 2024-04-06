@@ -45,4 +45,14 @@ public class ChatControllerApi {
             @RequestBody ChatMessageRequestDto chatMessageRequestDto) throws JsonProcessingException, ParseException {
         return this.chatgptService.sendMessage(chatId, chatMessageRequestDto);
     }
+
+    @GetMapping("/cache/{chatId}")
+    public String test(@PathVariable("chatId") Long chatId) {
+        return this.chatgptService.cacheNewestListChatMessage(chatId);
+    }
+
+    @GetMapping("/test/{chatId}")
+    public String test2(@PathVariable("chatId") Long chatId) {
+        return this.chatgptService.newestListChatMessage(chatId);
+    }
 }

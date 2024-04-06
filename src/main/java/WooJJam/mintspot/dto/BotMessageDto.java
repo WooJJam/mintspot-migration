@@ -17,4 +17,9 @@ public class BotMessageDto {
         this.botContent = botContent;
         this.createdAt = createdAt;
     }
+
+//    public BotMessageDto2(String userContent, String botContent) {
+//        this.userContent = userContent;
+//        this.botContent = botContent;
+//    }
 }

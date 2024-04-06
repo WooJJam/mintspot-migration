@@ -1,5 +1,7 @@
 package WooJJam.mintspot.repository;
 
+import WooJJam.mintspot.domain.Bot;
+import WooJJam.mintspot.domain.Message;
 import WooJJam.mintspot.domain.chat.Chat;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -35,16 +37,31 @@ public class ChatRepository {
                 .getResultList();
     }
 
-    public Chat newestListChatMessage(Long chatId) {
+    public List<Message> newestListUserMessage(Long chatId) {
         try {
             return em.createQuery(
-                            "select distinct c from Chat c" +
-                                    " join fetch c.messages m" +
-                                    " join c.bot b" +
+                            "select distinct m from Message m" +
+                                    " join fetch m.chat c" +
+//                                    " join c.bot b" +
                                     " where c.id = :chatId" +
-                                    " order by m.createdAt desc", Chat.class)
+                                    " order by m.createdAt desc", Message.class)
                     .setParameter("chatId", chatId)
-                    .getSingleResult();
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Bot> newestListBotMessage(Long chatId) {
+        try {
+            return em.createQuery(
+                            "select distinct b from Bot b" +
+                                    " join fetch b.chat c" +
+//                                    " join c.bot b" +
+                                    " where c.id = :chatId" +
+                                    " order by b.createdAt desc", Bot.class)
+                    .setParameter("chatId", chatId)
+                    .getResultList();
         } catch (NoResultException e) {
             return null;
         }
