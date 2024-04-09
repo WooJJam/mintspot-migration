@@ -65,7 +65,8 @@ public class UserControllerMvc {
     public String login(
             @Valid @ModelAttribute("user") UserLoginRequestBodyDto userLoginRequestBodyDto,
             BindingResult bindingResult,
-            HttpServletRequest request) {
+            HttpServletRequest request,
+            Model model) {
 
         if (bindingResult.hasErrors()) {
             log.info("error = {}",bindingResult);
@@ -81,6 +82,7 @@ public class UserControllerMvc {
             session.setAttribute("user", findUser);
             return "redirect:/chat/" + userId;
         } else {
+            model.addAttribute("error", "존재하지 않는 계정이거나 비밀번호가 일치하지 않습니다.");
             return "login";
         }
     }

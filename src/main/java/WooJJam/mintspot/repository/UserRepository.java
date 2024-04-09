@@ -2,6 +2,7 @@ package WooJJam.mintspot.repository;
 
 import WooJJam.mintspot.domain.user.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,9 +19,13 @@ public class UserRepository {
     }
 
     public User findByEmail(String email) {
-        return em.createQuery("select u from User u where u.email=:email", User.class)
-                .setParameter("email", email)
-                .getSingleResult();
+        try {
+            return em.createQuery("select u from User u where u.email=:email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public List<User> findAll() {

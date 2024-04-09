@@ -35,7 +35,7 @@ public class UserService {
         String email = userLoginRequestBodyDto.getEmail();
         String password = userLoginRequestBodyDto.getPassword();
         User findUser = userRepository.findByEmail(email);
-        if (findUser.getEmail().equals(email) &&
+        if (findUser != null && findUser.getEmail().equals(email) &&
         findUser.getPassword().equals(password)) {
             return Optional.of(findUser.getId());
         } else {
