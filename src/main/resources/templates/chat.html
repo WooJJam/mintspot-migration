@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mint Spot</title>
+  <script>
+    function popup(){
+      var url = "popup.html";
+      var name = "_self";
+      var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+      window.open(url, name, option);
+    }
+  </script>
   <style>
     body {
       display: flex;
@@ -128,7 +136,7 @@
     <p>궁금한 컨텐츠를 선택하여 민트스팟에게 물어보세요!</p>
   </div>
   <ul class="menu">
-    <li><a href="#">몸<i class="right-icon">👉</i></a></li>
+    <li><a href="/chat/bot?param=BODY">몸<i class="right-icon">👉</i></a></li>
     <li><a href="#">성생활<i class="right-icon">👉</i></a></li>
     <li><a href="#">성적자아<i class="right-icon">🔒</i></a></li>
     <li><a href="#">기타<i class="right-icon">🔒</i></a></li>

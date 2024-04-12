@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mint Spot</title>
   <style>
     body {
@@ -17,104 +16,118 @@
     }
 
     .container {
-      width: 80%;
-      margin: 0 auto;
-      text-align: center;
-      display: inline-block;
-    }
-
-    .header {
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .nav-bar {
+      width: 100%; /* 전체 너비로 설정 */
       display: flex;
-      justify-content: space-between;
-      padding: 10px 20px;
     }
 
-    .nav-bar a {
-      text-decoration: none;
-      background: #4dd6d3;
-      color: black;
-      padding: 10px 10px;
+    .menu-wrapper {
+      flex: 1; /* 남은 공간을 차지하도록 설정 */
+    }
+
+    .chat_wrap {
+      width: 350px;
+      height: 100%;
+      background: #a9bdce;
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      overflow-y: auto; /* 채팅이 길어질 경우 스크롤 표시 */
+    }
+
+    .chat_content {
+      padding: 20px 15px;
+    }
+
+    .chat_input {
+      width: calc(100% - 40px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: none;
       border-radius: 5px;
     }
 
-    .menu {
-      list-style: none;
-      padding: 0;
-      display: inline-block;
-    }
-
-    .menu li {
-      width: 450px;
-      margin: 10px 0;
+    .send_btn {
+      width: 40px;
+      padding: 10px;
+      background: #ffeb33;
+      border: none;
       border-radius: 5px;
-      border: solid 1px #5e17eb;
-      position: relative;
-      display: block;
-    }
-
-    .menu li a {
-      display: block;
-      padding: 15px 20px;
-      color: white;
-      text-decoration: none;
-      align-items: center;
-    }
-
-    .menu li a:hover {
-      background-color: #5e17eb;
-    }
-
-    .menu li a i {
-      margin-right: 10px;
-    }
-
-    .menu li a .right-icon {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
+      color: #0a0a0a;
     }
 
     .right-bar {
-      display: inline-block;
       width: 20%;
-      border-bottom: solid 1px #5e17eb;
+      background-color: #5e17eb;
+      overflow-y: auto; /* 채팅 목록이 길어질 경우 스크롤 표시 */
     }
 
     .right-bar article {
-      margin: 5px;
-      padding: 5px;
+      padding: 10px;
+      border-bottom: 1px solid #fff;
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="nav-bar">
-    <div>MintSpot</div>
-    <a href="#">Log in</a>
+  <div class="menu-wrapper">
+    <div class="header">
+      <h1>민트스팟 컨텐츠</h1>
+      <p>궁금한 컨텐츠를 선택하여 민트스팟에게 물어보세요!</p>
+    </div>
+    <ul class="menu">
+      <li><a href="#">몸<i class="right-icon">👉</i></a></li>
+      <li><a href="#">성생활<i class="right-icon">👉</i></a></li>
+      <li><a href="#">성적자아<i class="right-icon">🔒</i></a></li>
+      <li><a href="#">기타<i class="right-icon">🔒</i></a></li>
+    </ul>
   </div>
-  <div class="header">
-    <h1>민트스팟 컨텐츠</h1>
-    <p>궁금한 컨텐츠를 선택하여 민트스팟에게 물어보세요!</p>
+
+  <div class="chat_wrap">
+    <div class="chat_header">
+      <span>FAQ 챗봇</span>
+    </div>
+    <div id="divbox" class="chat_content"></div>
+    <form id="form">
+      <input type="text" name="input1" class="chat_input" id="input1" size="74"/>
+      <input type="button" value="전송" id="btn_submit" class="send_btn"/>
+    </form>
   </div>
-  <ul class="menu">
-    <li><a href="#">몸<i class="right-icon">👉</i></a></li>
-    <li><a href="#">성생활<i class="right-icon">👉</i></a></li>
-    <li><a href="#">성적자아<i class="right-icon">🔒</i></a></li>
-    <li><a href="#">기타<i class="right-icon">🔒</i></a></li>
-  </ul>
-</div>
-<div class="right-bar">
-  <article>aa</article>
-  <article>bb</article>
-  <article>cc</article>
+
+  <div class="right-bar">
+    <article>aa</article>
+    <article>bb</article>
+    <article>cc</article>
+  </div>
 </div>
 
+<script src="/static/jquery-3.2.1.min.js"></script>
+<script>
+  $('#btn_submit').click(function () {
+    send();
+  });
+  $('#form').on('submit', function (e) {
+    e.preventDefault();
+    send();
+  });
+
+  function send() {
+    $('#divbox').append('<div class="msg_box send"><span>' + $('#input1').val() + '</span></div>');
+    $("#divbox").scrollTop($("#divbox")[0].scrollHeight);
+    console.log("serial" + $('form').serialize())
+    $.ajax({
+      url: 'http://127.0.0.1:8080/api/v1/chat/bot/', //챗봇 api url
+      type: 'post',
+      dataType: 'json',
+      data: $('form').serialize(),
+      success: function (data) {
+        $('#divbox').append('<div class="msg_box receive"><span>' + data.response + '</span></div>');
+        $("#divbox").scrollTop($("#divbox")[0].scrollHeight);
+      }
+    });
+    $('#input1').val('');
+  }
+</script>
 </body>
 </html>
