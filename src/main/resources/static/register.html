@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>회원가입</title>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <style>
         body {
             background-color: #5D5C61;
@@ -26,14 +26,26 @@
 
         .form-and-character {
             margin-top: 10px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            display: flex;
             align-items: center;
         }
 
         .form-container {
             margin-top: 20px;
+            flex: 1; /* 오른쪽 영역이 나머지 공간을 모두 차지하도록 설정 */
+        }
+
+        .character-container {
+            margin-right: 20px; /* 사진과 폼 사이의 간격 조절 */
+            width: 500px; /* 사진 컨테이너의 고정 너비 설정 */
+            height: 100%;
+        }
+
+        .character-container img {
+            width: 360px; /* 이미지를 부모 요소의 너비에 맞게 조정 */
+            height: 300px;
+            border-radius: 50%;
+            margin-top: 10px;
         }
 
         input[type=text],
@@ -64,27 +76,65 @@
             border-radius: 5px;
         }
 
-        .character-container img {
-            width: 300px;
-            border-radius: 50%;
-            margin-top: 10px;
+        .img-input {
+            display: none;
         }
 
     </style>
 </head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
+
+<script>
+    $(document).ready(function(){
+
+        $("#image").change(function() {
+
+            $("#preview_img").empty();
+
+            var input = document.getElementById("image");
+            var files = input.files;
+            var fReader = new FileReader();
+            fReader.readAsDataURL(files[0]);
+
+            fReader.onloadend = function(event){
+                var lastModified = files[0].lastModified;
+                $("#preview_img").append('<div class="img_div" id="'+lastModified+'"><div class="i_div"><i class="bi bi-x-square-fill" style="color:white;float:right;" key="'+lastModified+'"></i></div><img id="view" src="'+event.target.result+'" class="img_div_img"/></div>');
+            }
+
+        });
+
+        $(document).on("click", ".i_div", function(e){
+            var input = $("#image").prop('files');
+            const dataTranster = new DataTransfer();
+            var target = e.target;
+            var removeId = $(target).attr("key");
+            Array.from(input).filter(file => file.lastModified != removeId)
+                .forEach(file => {
+                    dataTranster.items.add(file);
+                });
+
+            $('#image')[0].files = dataTranster.files;
+
+            $("#"+removeId).remove();
+
+            var input = $("#image")[0].files;
+
+        });
+    });
+</script>
 <body>
 <div class="welcome-container">
     <h1>환영합니다!</h1>
     <p>민트스팟에서 계정을 등록하고 고민을 나눠보세요!</p>
     <div class="form-and-character">
-        <form>
-            <div class="character-container">
-                <img src="output_740337273.jpg" alt="캐릭터 이미지">
-            </div>
-            <button type="submit">사진 추가하기</button>
-        </form>
+        <div class="character-container">
+            <div id='preview_img' style="text-align:center;"></div>
+            <button onclick="document.getElementById('image').click()">사진 추가하기</button>
+            <input class="img-input" type="file" id="image" name="image[]" multiple='multiple' onchange='' >
+<!--            <label for="image">사진 추가하기</label>-->
+        </div>
         <div class="form-container">
-            <form>
+            <form enctype="multipart/form-data">
                 <p><label for="name">이름</label>
                     <input type="text" id="name" name="name" required></p>
                 <p><label for="password">패스워드</label>
@@ -101,11 +151,11 @@
                     <input type="radio" id="bisexual" name="sexual" value="양성애자"/>
                     <label for="bisexual">양성애자</label>
                     <input type="radio" id="homosexual" name="sexual" value="동성애자"/>
-                    <label for="homosexual">동성애자</label></div>
+                    <label for="homosexual">동성애자</label>
+                </div>
                 <button type="submit">회원가입</button>
             </form>
         </div>
-
     </div>
 </div>
 </body>

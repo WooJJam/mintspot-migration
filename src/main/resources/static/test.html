@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>게시판 입력</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+  <!-- 합쳐지고 최소화된 최신 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+  <!-- 부가적인 테마 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+  <style>
+    .container-fluid {
+      width:80%;
+      margin-top:40px;
+    }
+    .table th {
+      text-align:center;
+    }
+    .table td {
+      text-align:center;
+    }
+    .img_div {
+      float:left;
+      /* width:100px;
+      height:70px; */
+      margin-right: 5px;
+      margin-bottom:5px;
+      background-color: black;
+      height: 95px;
+    }
+    .img_div_img {
+      width: 100px;
+      height: 70px;
+
+
+    }
+    .i_div {
+      position: relative;
+      /* left: 86px;
+      top: 17px; */
+    }
+  </style>
+</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
+<script>
+  $(document).ready(function(){
+
+    $("#image").change(function() {
+
+      $("#preview_img").empty();
+
+      var input = document.getElementById("image");
+      var files = input.files;
+      var a = 0;
+      // for (var i = 0; i < files.length; i++) {
+
+        var fReader = new FileReader();
+        fReader.readAsDataURL(files[0]);
+
+        fReader.onloadend = function(event){
+          var lastModified = files[0].lastModified;
+          $("#preview_img").append('<div class="img_div" id="'+lastModified+'"><div class="i_div"><i class="bi bi-x-square-fill" style="color:white;float:right;" key="'+lastModified+'"></i></div><img id="view" src="'+event.target.result+'" class="img_div_img"/></div>');
+          a = a + 1;
+        // }
+      }
+
+    });
+
+    $(document).on("click", ".i_div", function(e){
+      var input = $("#image").prop('files');
+      const dataTranster = new DataTransfer();
+      var target = e.target;
+      var removeId = $(target).attr("key");
+      Array.from(input).filter(file => file.lastModified != removeId)
+              .forEach(file => {
+                dataTranster.items.add(file);
+              });
+
+      $('#image')[0].files = dataTranster.files;
+
+      $("#"+removeId).remove();
+
+      var input = $("#image")[0].files;
+
+    });
+  });
+</script>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center">
+        게시판 입력
+      </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form name="board_form" id="board_form" role="form" method='post' action='/board/insert'  onsubmit="return check_form();" enctype="multipart/form-data">
+        <div class="form-group">
+
+          <label for="subject">
+            제목
+          </label>
+          <input type="text" class="form-control" id="subject" name="title" />
+        </div>
+
+        <div class="form-group">
+          <label for="textarea">
+            내용
+          </label>
+          <textarea class="form-control" id="textarea" rows="15"  name="content"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">
+            작성자
+          </label>
+          <input type="text" class="form-control" id="subject" name="writer" />
+        </div>
+
+        <div class="form-group">
+          <label for="subject">
+            파일
+          </label>
+          <div id='current_file'>
+            <input type="file" class="form-control" id="image" name="image[]" multiple='multiple' onchange=''/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">
+            파일미리보기
+          </label>
+        </div>
+
+        <div class="form-group" style="display:flex;">
+
+          <div id='preview_img' style="text-align:left;"></div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">
+            저장
+          </button>
+          <button type="cancel" class="btn btn-cancel" onclick="window.location='/board?page=1';return false;">
+            취소
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</html>

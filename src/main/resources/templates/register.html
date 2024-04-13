@@ -81,13 +81,12 @@
     <h1>환영합니다!</h1>
     <p>민트스팟에서 계정을 등록하고 고민을 나눠보세요!</p>
     <div class="form-and-character">
-        <!--        <form>-->
-        <div class="character-container">
-            프로필
-            <!--                <img src="output_740337273.jpg" alt="캐릭터 이미지">-->
-        </div>
-        <!--            <input type="submit">사진 추가하기</input>-->
-        <!--        </form>-->
+<!--                <form>-->
+<!--        <div class="character-container">-->
+<!--            <img src="output_740337273.jpg" alt="캐릭터 이미지">-->
+<!--        </div>-->
+                    <input type="file" name="사진 추가하기">
+                </form>
         <div class="form-container">
             <form th:action th:object="${user}" method="post">
                 <p><label for="email">아이디</label>
