@@ -16,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -37,6 +39,7 @@ public class UserControllerMvc {
     @PostMapping("/register")
     public String register(
             @Validated @ModelAttribute("user") UserRegisterRequestBodyDto userRegisterRequestBodyDto,
+            @RequestParam(name = "image[]") List<MultipartFile> imageFile,
             BindingResult bindingResult,
             HttpServletRequest request,
             Model model
@@ -86,5 +89,4 @@ public class UserControllerMvc {
             return "login";
         }
     }
-
 }

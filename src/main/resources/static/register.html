@@ -130,11 +130,12 @@
         <div class="character-container">
             <div id='preview_img' style="text-align:center;"></div>
             <button onclick="document.getElementById('image').click()">사진 추가하기</button>
-            <input class="img-input" type="file" id="image" name="image[]" multiple='multiple' onchange='' >
-<!--            <label for="image">사진 추가하기</label>-->
+            <form enctype="multipart/form-data">
+                <input class="img-input" type="file" id="image" name="image[]" multiple='multiple' onchange='' >
+            </form>
         </div>
         <div class="form-container">
-            <form enctype="multipart/form-data">
+            <form enctype="multipart/form-data" action="register.php" method="post">
                 <p><label for="name">이름</label>
                     <input type="text" id="name" name="name" required></p>
                 <p><label for="password">패스워드</label>
@@ -157,6 +158,3 @@
             </form>
         </div>
     </div>
-</div>
-</body>
-</html>
