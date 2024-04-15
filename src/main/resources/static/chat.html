@@ -16,91 +16,149 @@
     }
 
     .container {
-      width: 100%; /* 전체 너비로 설정 */
-      display: flex;
-    }
-
-    .menu-wrapper {
-      flex: 1; /* 남은 공간을 차지하도록 설정 */
-    }
-
-    .chat_wrap {
-      width: 350px;
+      width: 80%;
       height: 100%;
-      background: #a9bdce;
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      overflow-y: auto; /* 채팅이 길어질 경우 스크롤 표시 */
+      margin: 0 auto;
+      text-align: center;
+      display: inline-block;
     }
 
-    .chat_content {
-      padding: 20px 15px;
+    .header {
+      padding: 20px;
+      margin-bottom: 20px;
     }
 
-    .chat_input {
-      width: calc(100% - 40px);
-      padding: 10px;
-      margin-bottom: 10px;
-      border: none;
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-bar a {
+      text-decoration: none;
+      background: #4dd6d3;
+      color: black;
+      padding: 10px 10px;
       border-radius: 5px;
     }
 
-    .send_btn {
-      width: 40px;
-      padding: 10px;
-      background: #ffeb33;
-      border: none;
+    .nav-bar span {
+      text-decoration: none;
+      background: #4dd6d3;
+      color: black;
+      padding: 10px 10px;
       border-radius: 5px;
-      color: #0a0a0a;
+    }
+
+    .menu {
+      list-style: none;
+      padding: 0;
+      display: inline-block;
+    }
+
+    .menu li {
+      width: 450px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: solid 1px #5e17eb;
+      position: relative;
+      display: block;
+    }
+
+    .menu li a {
+      display: block;
+      padding: 15px 20px;
+      color: white;
+      text-decoration: none;
+      align-items: center;
+    }
+
+    .menu li a:hover {
+      background-color: #5e17eb;
+    }
+
+    .menu li a i {
+      margin-right: 10px;
+    }
+
+    .menu li a .right-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     .right-bar {
+      background: #3E3B5A;
+      display: inline-block;
       width: 20%;
-      background-color: #5e17eb;
-      overflow-y: auto; /* 채팅 목록이 길어질 경우 스크롤 표시 */
+      text-align: center;
     }
 
-    .right-bar article {
-      padding: 10px;
-      border-bottom: 1px solid #fff;
+    .right-bar-text {
+      margin: 10px;
+      color: bisque;
+    }
+
+    .right-bar-article {
+      margin: 5px;
+      padding: 5px;
+      font-size: 14px;
+    }
+
+    .right-bar-article a:link {
+      color: white;
+      text-decoration: none;
+    }
+
+    .right-bar-article a:hover {
+      color: green;
+      text-decoration: underline;
+    }
+
+    .profile_img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      padding-right: 10px;
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="menu-wrapper">
-    <div class="header">
-      <h1>민트스팟 컨텐츠</h1>
-      <p>궁금한 컨텐츠를 선택하여 민트스팟에게 물어보세요!</p>
+  <div class="nav-bar">
+    <div>MintSpot</div>
+    <div class="nav-links">
+      <img class="profile_img" src="" alt="프로필 사진">
+      <a>Log in</a>
     </div>
+  </div>
+  <div class="header">
+    <h1>민트스팟 컨텐츠</h1>
+    <p>궁금한 컨텐츠를 선택하여 민트스팟에게 물어보세요!</p>
+  </div>
     <ul class="menu">
       <li><a href="#">몸<i class="right-icon">👉</i></a></li>
       <li><a href="#">성생활<i class="right-icon">👉</i></a></li>
       <li><a href="#">성적자아<i class="right-icon">🔒</i></a></li>
       <li><a href="#">기타<i class="right-icon">🔒</i></a></li>
     </ul>
-  </div>
-
-  <div class="chat_wrap">
-    <div class="chat_header">
-      <span>FAQ 챗봇</span>
-    </div>
-    <div id="divbox" class="chat_content"></div>
-    <form id="form">
-      <input type="text" name="input1" class="chat_input" id="input1" size="74"/>
-      <input type="button" value="전송" id="btn_submit" class="send_btn"/>
-    </form>
-  </div>
-
-  <div class="right-bar">
-    <article>aa</article>
-    <article>bb</article>
-    <article>cc</article>
-  </div>
 </div>
+  <div class="right-bar">
+    <div class="right-bar-text"> 이전 채팅</div>
+    <div class="right-bar-article">
+      <!--      <span>aa</span>-->
+      <!--      <span>bb</span>-->
+    </div>
+
+  </div>
 
 <script src="/static/jquery-3.2.1.min.js"></script>
 <script>

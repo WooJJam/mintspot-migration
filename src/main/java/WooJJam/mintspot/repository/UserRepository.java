@@ -34,9 +34,8 @@ public class UserRepository {
                 .getResultList();
     }
 
-    public Long register(User user) {
+    public void register(User user) {
         em.persist(user);
-        return user.getId();
     }
 
 

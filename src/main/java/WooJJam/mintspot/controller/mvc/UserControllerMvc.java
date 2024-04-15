@@ -5,6 +5,7 @@ import WooJJam.mintspot.domain.user.Sexual;
 import WooJJam.mintspot.domain.user.User;
 import WooJJam.mintspot.dto.user.UserLoginRequestBodyDto;
 import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
+import WooJJam.mintspot.dto.user.UserRegisterResponseDto;
 import WooJJam.mintspot.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -53,9 +54,8 @@ public class UserControllerMvc {
         }
 
         HttpSession session = request.getSession();
-        session.setAttribute("email", userRegisterRequestBodyDto.getEmail());
-        Long userId = userService.register(userRegisterRequestBodyDto, imageFile);
-        return "redirect:/chat/"+userId;
+        UserRegisterResponseDto registerUser = userService.register(userRegisterRequestBodyDto, imageFile);
+        return "redirect:/chat/"+registerUser.getUserId();
     }
 
     @GetMapping("/login")

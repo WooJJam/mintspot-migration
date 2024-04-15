@@ -4,6 +4,7 @@ import WooJJam.mintspot.domain.Profile;
 import WooJJam.mintspot.domain.user.User;
 import WooJJam.mintspot.dto.user.UserLoginRequestBodyDto;
 import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
+import WooJJam.mintspot.dto.user.UserRegisterResponseDto;
 import WooJJam.mintspot.repository.UserRepository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -35,11 +36,32 @@ public class UserService {
     private final AmazonS3 amazonS3;
 
     @Transactional
-    public Long register(UserRegisterRequestBodyDto userRegisterRequestBodyDto, MultipartFile multipartFile) throws IOException {
+    public UserRegisterResponseDto register(UserRegisterRequestBodyDto userRegisterRequestBodyDto, MultipartFile multipartFile) throws IOException {
         String originalFilename = multipartFile.getOriginalFilename();
         User user = new User();
         Profile profile = new Profile();
 
+        putImageS3(multipartFile, originalFilename);
+        String profileUrl = getImageUrl(originalFilename);
+
+        profile.createProfile(originalFilename, profileUrl);
+        user.createUser(
+                userRegisterRequestBodyDto.getEmail(),
+                userRegisterRequestBodyDto.getPassword(),
+                userRegisterRequestBodyDto.getGender(),
+                userRegisterRequestBodyDto.getSexual(),
+                profile
+        );
+
+        userRepository.register(user);
+        return new UserRegisterResponseDto(user.getId(), user.getEmail(), profileUrl);
+    }
+
+    private String getImageUrl(String originalFilename) {
+        return amazonS3.getUrl(bucket, originalFilename).toString();
+    }
+
+    private void putImageS3(MultipartFile multipartFile, String originalFilename) throws IOException {
         InputStream is = multipartFile.getInputStream();
         byte[] bytes = IOUtils.toByteArray(is);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
@@ -49,19 +71,6 @@ public class UserService {
                         .withCannedAcl(CannedAccessControlList.PublicRead);
 
         amazonS3.putObject(putObjectRequest);
-        String profileUrl = amazonS3.getUrl(bucket, originalFilename).toString();
-
-        profile.createProfile(originalFilename, profileUrl);
-
-        user.createUser(
-                userRegisterRequestBodyDto.getEmail(),
-                userRegisterRequestBodyDto.getPassword(),
-                userRegisterRequestBodyDto.getGender(),
-                userRegisterRequestBodyDto.getSexual(),
-                profile
-        );
-
-        return userRepository.register(user);
     }
 
     public Optional<Long> login(UserLoginRequestBodyDto userLoginRequestBodyDto) {
