@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +40,11 @@ public class UserControllerMvc {
     @PostMapping("/register")
     public String register(
             @Validated @ModelAttribute("user") UserRegisterRequestBodyDto userRegisterRequestBodyDto,
-            @RequestParam(name = "image[]") List<MultipartFile> imageFile,
             BindingResult bindingResult,
+            @RequestParam(name = "profile") MultipartFile imageFile,
             HttpServletRequest request,
             Model model
-            ) {
-
+            ) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("error = {}", bindingResult);
             model.addAttribute("gender", Gender.values()); // Gender enum 값 추가
@@ -54,7 +54,7 @@ public class UserControllerMvc {
 
         HttpSession session = request.getSession();
         session.setAttribute("email", userRegisterRequestBodyDto.getEmail());
-        Long userId = userService.register(userRegisterRequestBodyDto);
+        Long userId = userService.register(userRegisterRequestBodyDto, imageFile);
         return "redirect:/chat/"+userId;
     }
 

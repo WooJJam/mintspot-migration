@@ -21,10 +21,10 @@ public class UserControllerApi {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @PostMapping("/register")
-    public Long register(@RequestBody UserRegisterRequestBodyDto userRegisterRequestBodyDto) {
-        return userService.register(userRegisterRequestBodyDto);
-    }
+//    @PostMapping("/register")
+//    public Long register(@RequestBody UserRegisterRequestBodyDto userRegisterRequestBodyDto) {
+//        return userService.register(userRegisterRequestBodyDto);
+//    }
 
     @PostMapping("/login")
     public Optional<Long> login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
