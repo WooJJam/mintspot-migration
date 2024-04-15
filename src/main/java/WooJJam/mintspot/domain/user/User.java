@@ -1,5 +1,6 @@
 package WooJJam.mintspot.domain.user;
 
+import WooJJam.mintspot.domain.Profile;
 import WooJJam.mintspot.domain.chat.Chat;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,11 +28,17 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Chat> chats = new ArrayList<>();
 
-    public void createUser(String email, String password, Gender gender, Sexual sexual) {
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
+
+
+    public void createUser(String email, String password, Gender gender, Sexual sexual, Profile profile) {
         this.email = email;
         this.password = password;
         this.gender = gender;
         this.sexual = sexual;
+        this.profile = profile;
+        this.profile.createUser(this);
     }
 
 }
