@@ -73,13 +73,13 @@ public class UserService {
         amazonS3.putObject(putObjectRequest);
     }
 
-    public Optional<Long> login(UserLoginRequestBodyDto userLoginRequestBodyDto) {
+    public Optional<User> login(UserLoginRequestBodyDto userLoginRequestBodyDto) {
         String email = userLoginRequestBodyDto.getEmail();
         String password = userLoginRequestBodyDto.getPassword();
         User findUser = userRepository.findByEmail(email);
         if (findUser != null && findUser.getEmail().equals(email) &&
         findUser.getPassword().equals(password)) {
-            return Optional.of(findUser.getId());
+            return Optional.of(findUser);
         } else {
            return Optional.empty();
         }

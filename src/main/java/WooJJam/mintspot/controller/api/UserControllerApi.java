@@ -27,7 +27,7 @@ public class UserControllerApi {
 //    }
 
     @PostMapping("/login")
-    public Optional<Long> login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
+    public Optional<User> login(@RequestBody UserLoginRequestBodyDto userLoginRequestBodyDto) {
         return userService.login(userLoginRequestBodyDto);
     }
 

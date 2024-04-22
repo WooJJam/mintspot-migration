@@ -15,7 +15,14 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
+      timeout: 600

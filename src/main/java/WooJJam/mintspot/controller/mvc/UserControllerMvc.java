@@ -7,6 +7,7 @@ import WooJJam.mintspot.dto.user.UserLoginRequestBodyDto;
 import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
 import WooJJam.mintspot.dto.user.UserRegisterResponseDto;
 import WooJJam.mintspot.service.UserService;
+import WooJJam.mintspot.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -76,14 +77,12 @@ public class UserControllerMvc {
             return "login";
         }
 
-        Optional<Long> optionalUserId = userService.login(userLoginRequestBodyDto);
-
-        if (optionalUserId.isPresent()) {
-            Long userId = optionalUserId.get();
-            User findUser = userService.findOne(userId);
+        Optional<User> findUser = userService.login(userLoginRequestBodyDto);
+        if (findUser.isPresent()) {
+            User user = findUser.get();
             HttpSession session = request.getSession();
-            session.setAttribute("user", findUser);
-            return "redirect:/chat/" + userId;
+            session.setAttribute(SessionConst.LOGIN_USER, user);
+            return "redirect:/chat/" + user.getId();
         } else {
             model.addAttribute("error", "존재하지 않는 계정이거나 비밀번호가 일치하지 않습니다.");
             return "login";

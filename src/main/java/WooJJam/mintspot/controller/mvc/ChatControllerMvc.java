@@ -8,6 +8,7 @@ import WooJJam.mintspot.repository.ChatRepository;
 import WooJJam.mintspot.repository.UserRepository;
 import WooJJam.mintspot.service.ChatGptService;
 import WooJJam.mintspot.service.ChatService;
+import WooJJam.mintspot.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,17 @@ public class ChatControllerMvc {
 
     @GetMapping("/{userId}")
     public String chatRenderView(
+            @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser,
             @PathVariable("userId") Long userId,
             Model model,
             HttpServletRequest request) {
+
+        if (loginUser == null) {
+            model.addAttribute("user", new User());
+            log.info("loginUser = {}", loginUser);
+            return "login";
+        }
+
         List<Chat> chats = chatService.listChat(userId);
         model.addAttribute("chats", chats);
         model.addAttribute("userId", userId);
