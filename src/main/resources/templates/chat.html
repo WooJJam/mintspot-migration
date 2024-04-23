@@ -142,6 +142,9 @@
   <div class="nav-bar">
     <div>MintSpot</div>
     <div class="nav-links">
+      <form th:action="@{/user/logout}" th:method="post">
+        <button type="submit">로그아웃</button>
+      </form>
       <img class="profile_img" th:src="${session.loginUser.profile.profileUrl}" alt="프로필 사진">
       <span th:text="${session.loginUser.email}"></span>
     </div>

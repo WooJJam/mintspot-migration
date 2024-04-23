@@ -89,4 +89,15 @@ public class UserControllerMvc {
             return "login";
         }
     }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession httpSession = request.getSession(false);
+
+        if (httpSession != null) {
+            httpSession.invalidate();
+        }
+
+        return "redirect:/";
+    }
 }
