@@ -1,5 +1,6 @@
 package WooJJam.mintspot.controller.mvc;
 
+import WooJJam.mintspot.annotation.login.LoginInfo;
 import WooJJam.mintspot.domain.chat.Category;
 import WooJJam.mintspot.domain.chat.Chat;
 import WooJJam.mintspot.domain.user.User;
@@ -31,7 +32,7 @@ public class ChatControllerMvc {
 
     @GetMapping("/{userId}")
     public String chatRenderView(
-            @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser,
+            @LoginInfo User loginUser,
             @PathVariable("userId") Long userId,
             Model model) throws IOException {
 
