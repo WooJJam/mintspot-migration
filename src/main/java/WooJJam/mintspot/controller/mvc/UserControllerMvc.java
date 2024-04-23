@@ -5,7 +5,7 @@ import WooJJam.mintspot.domain.user.Sexual;
 import WooJJam.mintspot.domain.user.User;
 import WooJJam.mintspot.dto.user.UserLoginRequestBodyDto;
 import WooJJam.mintspot.dto.user.UserRegisterRequestBodyDto;
-import WooJJam.mintspot.dto.user.UserRegisterResponseDto;
+import WooJJam.mintspot.dto.user.UserSessionInfoDto;
 import WooJJam.mintspot.service.UserService;
 import WooJJam.mintspot.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -55,7 +54,8 @@ public class UserControllerMvc {
         }
 
         HttpSession session = request.getSession();
-        UserRegisterResponseDto registerUser = userService.register(userRegisterRequestBodyDto, imageFile);
+        UserSessionInfoDto registerUser = userService.register(userRegisterRequestBodyDto, imageFile);
+        session.setAttribute(SessionConst.LOGIN_USER, registerUser);
         return "redirect:/chat/"+registerUser.getUserId();
     }
 
@@ -78,6 +78,7 @@ public class UserControllerMvc {
         }
 
         Optional<User> findUser = userService.login(userLoginRequestBodyDto);
+
         if (findUser.isPresent()) {
             User user = findUser.get();
             HttpSession session = request.getSession();

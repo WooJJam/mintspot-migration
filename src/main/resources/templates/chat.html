@@ -142,13 +142,8 @@
   <div class="nav-bar">
     <div>MintSpot</div>
     <div class="nav-links">
-    <div th:if="${session.user.email} == null">
-      <a href="/user/login">Log in</a>
-    </div>
-    <div th:if="${session.user.email} != null">
-      <img class="profile_img" th:src="${session.user.profile.profileUrl}" alt="프로필 사진">
-      <span th:text="${session.user.email}"></span>
-    </div>
+      <img class="profile_img" th:src="${session.loginUser.profile.profileUrl}" alt="프로필 사진">
+      <span th:text="${session.loginUser.email}"></span>
     </div>
   </div>
   <div class="header">

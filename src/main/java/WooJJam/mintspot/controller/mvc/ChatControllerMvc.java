@@ -10,6 +10,7 @@ import WooJJam.mintspot.service.ChatGptService;
 import WooJJam.mintspot.service.ChatService;
 import WooJJam.mintspot.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -31,13 +33,11 @@ public class ChatControllerMvc {
     public String chatRenderView(
             @SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser,
             @PathVariable("userId") Long userId,
-            Model model,
-            HttpServletRequest request) {
+            Model model) throws IOException {
 
         if (loginUser == null) {
             model.addAttribute("user", new User());
-            log.info("loginUser = {}", loginUser);
-            return "login";
+            return "redirect:/user/login";
         }
 
         List<Chat> chats = chatService.listChat(userId);
@@ -47,15 +47,14 @@ public class ChatControllerMvc {
     }
 
     @GetMapping("/bot")
-    public String chat(Model model,
-                       @RequestParam("param") Category category,
+    public String chat(@RequestParam("param") Category category,
                        HttpServletRequest request) {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         String email = user.getEmail();
         ChatCreateRequestBodyDto chatCreateRequestBodyDto = new ChatCreateRequestBodyDto(email, category);
         chatService.createChat(chatCreateRequestBodyDto);
-        log.info("Chat Info = {}", chatCreateRequestBodyDto.toString());
+        log.info("Chat Info = {}", chatCreateRequestBodyDto);
         return "chatBot";
     }
 
