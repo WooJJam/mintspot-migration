@@ -37,7 +37,7 @@ public class ChatControllerMvc {
 
         if (loginUser == null) {
             model.addAttribute("user", new User());
-            return "redirect:/user/login";
+            return "login";
         }
 
         List<Chat> chats = chatService.listChat(userId);
