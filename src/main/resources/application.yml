@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: API, DB
+    include: DATABASE
 
   jpa:
     hibernate:
