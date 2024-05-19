@@ -1,24 +1,30 @@
-#!/bin/bash
-BUILD_JAR=$(ls /home/ec2-user/action/build/libs/*.jar)
-JAR_NAME=$(basename $BUILD_JAR)
-echo "> build 파일명: $JAR_NAME" >> /home/ec2-user/action/deploy.log
+#!/usr/bin/env bash
 
-echo "> build 파일 복사" >> /home/ec2-user/action/deploy.log
-DEPLOY_PATH=/home/ec2-user/action/
-cp $BUILD_JAR $DEPLOY_PATH
+source /home/ubuntu/action/scripts/properties.sh
 
-echo "> 현재 실행중인 애플리케이션 pid 확인" >> /home/ec2-user/action/deploy.log
-CURRENT_PID=$(pgrep -f $JAR_NAME)
+PROJECT_NAME=mint-spot
+REPOSITORY=/home/ubuntu/action
+PACKAGE=$REPOSITORY/build/libs/
+JAR_NAME=$(ls -tr $PACKAGE | grep 'SNAPSHOT.jar' | tail -n 1)
+JAR_PATH=$PACKAGE$JAR_NAME
+
+echo $JAR_NAME
+echo $JAR_PATH
+
+cd $REPOSITORY
+
+CURRENT_PID=$(pgrep -f $PROJECT_NAME)
 
 if [ -z $CURRENT_PID ]
 then
-  echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다." >> /home/ec2-user/action/deploy.log
+  echo "> 종료할 애플리케이션이 없습니다"
 else
-  echo "> kill -15 $CURRENT_PID"
+  echo "> 실행 중인 애플리케이션 종료 $CURRENT_PID"
   kill -15 $CURRENT_PID
   sleep 5
 fi
 
-DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
-echo "> DEPLOY_JAR 배포"    >> /home/ec2-user/action/deploy.log
-nohup java -jar $DEPLOY_JAR >> /home/ec2-user/deploy.log 2>/home/ec2-user/action/deploy_err.log &
+echo "> 배포 - $JAR_PATH"
+chmod +x $JAR_PATH
+
+sudo nohup java -jar $JAR_PATH --spring.profiles.active=develop > /home/ubuntu/log/nohup_log.out 2> /home/ubuntu/log/nohup_error.out &
