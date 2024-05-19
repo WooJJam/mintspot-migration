@@ -39,6 +39,17 @@ jobs:
         echo "${{ secrets.DATABASE }}" >> ./application-database.yml
       shell: bash
 
+    - name: make application-api.yml
+      run: |
+        cd ./src/main/resources
+
+        # application-api.yml 파일 생성
+        touch ./application-api.yml
+
+        # GitHub-Actions 에서 설정한 값을 application-api.yml 파일에 쓰기
+        echo "${{ secrets.API }}" >> ./application-api.yml
+      shell: bash
+
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
