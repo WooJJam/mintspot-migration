@@ -85,7 +85,7 @@ jobs:
       run: aws s3 cp --region ap-northeast-2 ./deploy.zip s3://woojjam/
 
     - name: Code Deploy
-      run: aws deploy create-deployment --application-name woojjam-code-deploy-app --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name woojjam-code-deploy-group --s3-location bucket=woojjam,bundleType=zip,key=woojjam/deploy.zip
+      run: aws deploy create-deployment --application-name woojjam-code-deploy-app --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name woojjam-code-deploy-group --s3-location bucket=woojjam,bundleType=zip,key=deploy.zip
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
