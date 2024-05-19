@@ -82,7 +82,7 @@ jobs:
     - run: ls -al
 
     - name: Upload S3
-      run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./deploy.zip s3://ci-cd-test-123/ci-cd/
+      run: aws s3 cp --region ap-northeast-2 ./deploy.zip s3://woojjam/
 
     - name: Code Deploy
       run: aws deploy create-deployment --application-name mint-spot --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name woojjam-code-deploy-group --s3-location bucket=woojjam,bundleType=zip,key=woojjam/deploy.zip
