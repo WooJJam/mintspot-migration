@@ -1,18 +1,36 @@
+#version: 0.0
+#os: linux
+#files:
+#  - source:  /
+#    destination: /home/ubuntu/action
+#    overwrite: yes
+#
+#permissions:
+#  - object: /
+#    pattern: "**"
+#    owner: ubuntu
+#    group: ubuntu
+#
+#hooks:
+#  ApplicationStart:
+#    - location: deploy.sh
+#      timeout: 60
+#      runas: ubuntu
+
 version: 0.0
 os: linux
-files:
-  - source:  /
-    destination: /home/ubuntu/action
-    overwrite: yes
 
+files:
+  - source: /
+    destination: /home/ubuntu/mint-spot
+    overwrite: yes
+    file_exists_behavior: OVERWRITE
 permissions:
-  - object: /
-    pattern: "**"
+  - object: /home/ubuntu/mint-spot/
     owner: ubuntu
     group: ubuntu
-
 hooks:
-  ApplicationStart:
-    - location: deploy.sh
+  AfterInstall:
+    - location: scripts/deploy.sh
       timeout: 60
       runas: ubuntu
