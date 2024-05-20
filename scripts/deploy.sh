@@ -2,7 +2,7 @@
 
 source /home/ubuntu/action/scripts/properties.sh
 
-PROJECT_NAME=mint-spot
+PROJECT_NAME=mintspot
 REPOSITORY=/home/ubuntu/action
 PACKAGE=$REPOSITORY/build/libs/
 JAR_NAME=$(ls -tr $PACKAGE | grep 'SNAPSHOT.jar' | tail -n 1)
