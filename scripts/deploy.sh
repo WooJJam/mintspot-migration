@@ -34,7 +34,7 @@
 REPOSITORY=/home/ubuntu/mint-spot
 cd $REPOSITORY
 
-APP_NAME=mintspot
+APP_NAME=mint-spot
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep 'SNAPSHOT.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
@@ -54,3 +54,5 @@ chmod +x $JAR_PATH
 
 echo "> Deploy - $JAR_PATH "
 nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
+
+echo nohup.out 2>$1 &

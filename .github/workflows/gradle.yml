@@ -28,26 +28,26 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: make application-database.yml
+    - name: make application-database.properties
       run: |
         cd ./src/main/resources
           
-        # application-database.yml 파일 생성
-        touch ./application-database.yml
+        # application-database.properties 파일 생성
+        touch ./application-database.properties
           
-        # GitHub-Actions 에서 설정한 값을 application-database.yml 파일에 쓰기
-        echo "${{ secrets.DATABASE }}" >> ./application-database.yml
+        # GitHub-Actions 에서 설정한 값을 application-database.properties 파일에 쓰기
+        echo "${{ secrets.DATABASE }}" >> ./application-database.properties
       shell: bash
 
-    - name: make application-api.yml
+    - name: make application-api.properties
       run: |
         cd ./src/main/resources
 
-        # application-api.yml 파일 생성
-        touch ./application-api.yml
+        # application-api.properties 파일 생성
+        touch ./application-api.properties
 
-        # GitHub-Actions 에서 설정한 값을 application-api.yml 파일에 쓰기
-        echo "${{ secrets.API }}" >> ./application-api.yml
+        # GitHub-Actions 에서 설정한 값을 application-api.properties 파일에 쓰기
+        echo "${{ secrets.API }}" >> ./application-api.properties
       shell: bash
 
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
