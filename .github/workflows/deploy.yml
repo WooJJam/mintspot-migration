@@ -67,8 +67,8 @@ jobs:
     #   with:
     #     gradle-version: '8.5'
     #
-    # - name: Build with Gradle 8.5
-    #   run: gradle build
+    - name: Build with Gradle 8.5
+      run: gradle build
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
