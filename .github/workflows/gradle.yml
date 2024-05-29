@@ -55,11 +55,7 @@ jobs:
 
         echo "${{ secrets.API }}" >> ./application-api.properties
         
-        cd ../../src/test/resources
-        
-        touch ./application-api.properties
 
-        echo "${{ secrets.API }}" >> ./application-api.properties
       shell: bash
 
     - name: make test application-api.properties
