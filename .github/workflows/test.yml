@@ -10,8 +10,6 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "feat/**" ]
-  pull_request:
-    branches: [ "feat/**" ]
 
 jobs:
   build:
